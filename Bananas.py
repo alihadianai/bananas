@@ -4,6 +4,28 @@ from PIL import Image
 from io import BytesIO
 import time
 
+translations = {
+    "English": {
+        "title": "Banana Chatbot",
+        "subtitle": "Enter a prompt and the chatbot will respond!",
+        "generate_button": "Generate",
+        "prompt_text": "Prompt:",
+        "response_text": "Response:",
+        "error_text": "Unable to display image.",
+        "loading_text": "Generating response...",
+    },
+    "Japanese": {
+        "title": "バナナチャットボット",
+        "subtitle": "プロンプトを入力してください。チャットボットが応答します！",
+        "generate_button": "生成する",
+        "prompt_text": "プロンプト：",
+        "response_text": "応答：",
+        "error_text": "画像を表示できません。",
+        "loading_text": "応答を生成しています...",
+    }
+}
+
+
 # Define the function to generate the response
 def generate_response(prompt):
     # Insert your code here to generate the response
