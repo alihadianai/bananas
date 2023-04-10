@@ -94,5 +94,3 @@ if navigation == "Generator":
     st.write("Enter a prompt and we'll generate a random banana text art!")
     # Create the text input and Generate button
     prompt = st.text_input("Prompt:")
-    if st.button("Generate"):
-        with
