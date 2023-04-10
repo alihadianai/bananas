@@ -24,7 +24,7 @@ color: white;
 font-family: 'Press Start 2P', cursive;
 }
 .stButton button {
-background-color: #ffbf00;
+background-color: #46afdb;
 }
 .stTextInput>div>div>input {
 color: #46afdb;
