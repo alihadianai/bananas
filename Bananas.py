@@ -19,21 +19,6 @@ st.set_page_config(page_title="Banana Chatbot", page_icon="🍌", layout="wide")
 st.sidebar.title("Navigation")
 page = st.sidebar.radio("", ("Home", "Chat", "Information", "Code Resource", "About Us"))
 
-# Define the pages
-if page == "Home":
-    st.title("Welcome to Banana Chatbot")
-    st.write("This is a chatbot that generates responses to your prompts. Try it out in the Chat page!")
-    # Set background color to yellow
-    st.markdown(
-        """
-        <style>
-        body {
-            background-color: #ffff99;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
 elif page == "Chat":
     st.title("Chat with Banana Chatbot")
     st.write("Enter a prompt and the chatbot will respond!")
