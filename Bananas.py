@@ -13,74 +13,80 @@ def generate_response(prompt):
     return response
 
 # Set up the Streamlit app
-st.set_page_config(page_title="Banana Chatbot", page_icon="🍌", layout="wide")
-
-# Set the background color and style
-page_bg_img = '''
-<style>
-body {
-background-color: #151515;
-color: white;
-}
-.stButton button {
-background-color: #ffbf00;
-}
-.stTextInput>div>div>input {
-color: white;
-}
-.stTextInput>div>label {
-color: white;
-}
-.stTextInput>div>div>div {
-background-color: #333333;
-}
-.stTextArea>div>div>textarea {
-color: white;
-}
-.stTextArea>div>label {
-color: white;
-}
-.stTextArea>div>div>div {
-background-color: #333333;
-}
-</style>
-'''
-st.markdown(page_bg_img, unsafe_allow_html=True)
+st.set_page_config(page_title="AI Image Generator", page_icon="🎨", layout="wide")
 
 # Set up the navigation bar
-navigation = st.sidebar.radio("Navigation", ["Chat", "Information", "Code Resources", "About Us"])
+st.markdown("""
+<style>
+nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #330033;
+    color: white;
+}
 
-# Create the chat page
-if navigation == "Chat":
-    st.title("Banana Chatbot")
-    st.write("Enter a prompt and the chatbot will respond!")
+nav a {
+    color: white;
+    text-decoration: none;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+nav_pages = {
+    "Chat": "chat",
+    "Information": "info",
+    "Code Resources": "code",
+    "About Us": "about"
+}
+
+page = st.sidebar.selectbox("Select a page", list(nav_pages.keys()))
+
+nav_html = "<nav>"
+for name, url in nav_pages.items():
+    if url == page:
+        nav_html += f'<strong>{name}</strong>'
+    else:
+        nav_html += f'<a href="/{url}">{name}</a>'
+nav_html += "</nav>"
+
+st.markdown(nav_html, unsafe_allow_html=True)
+
+# Create the page content based on the selected page
+if page == "chat":
+    st.title("AI Image Generator")
+    st.write("Enter a prompt and the AI will generate an image!")
+    st.write("For example: 'Generate a sci-fi animation with Spielberg's director style'")
     # Create the text input and Generate button
-    prompt = st.text_input("Prompt:")
+    prompt = st.text_input("Prompt:", value="Generate a sci-fi animation with Spielberg's director style", max_chars=None, key=None, type='default', help=None, placeholder=None, on_change=None, args=None, kwargs=None)
+    prompt_text = prompt_css = '<p style="color:red;">' + prompt + '</p>'
     if st.button("Generate"):
-        with st.spinner("Generating response..."):
+        with st.spinner("Generating image..."):
             response = generate_response(prompt)
         st.success("Done!")
         st.write(response)
         # Download the image and display it
-        image_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
+        image_url = "https://imgtr.ee/images/2023/04/10/nQda2.png"
         response = requests.get(image_url)
         try:
             img = Image.open(BytesIO(response.content))
             st.image(img, use_column_width=True)
         except:
             st.warning("Unable to display image.")
-
-# Create the information page
-elif navigation == "Information":
-    st.title("Banana Information")
-    st.write("Bananas are a great source of potassium and other nutrients.")
-
-# Create the code resources page
-elif navigation == "Code Resources":
-    st.title("Banana Code Resources")
-    st.write("Here are some helpful resources for coding with bananas.")
-
-# Create the about us page
-else:
+elif page == "info":
+    st.title("Information")
+    st.write("This is the information page.")
+    st.write("Here you can find information about the AI image generator.")
+elif page == "code":
+    st.title("Code Resources")
+    st.write("This is the code resources page.")
+    st.write("Here you can find links to the code used to build the AI image generator.")
+elif page == "about":
     st.title("About Us")
-    st.write("We are a team of banana enthusiasts who love creating chatbots.")
+    st.write("This is the about us page.")
+    st.write("Here you can find information about the creators of the AI image generator.")
