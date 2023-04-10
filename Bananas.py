@@ -19,7 +19,7 @@ st.set_page_config(page_title="Banana Image Generator", page_icon="🍌", layout
 page_bg_img = '''
 <style>
 body {
-background-color: #5b5b5b;
+background-color: #46afdb;
 color: white;
 font-family: 'Press Start 2P', cursive;
 }
