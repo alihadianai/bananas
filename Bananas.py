@@ -1,8 +1,19 @@
 import streamlit as st
+import requests
 from PIL import Image, ImageDraw, ImageFont
+from io import BytesIO
+import time
+
+# Define the function to generate the response
+def generate_response(prompt):
+    # Insert your code here to generate the response
+    # You can use any language model or API you prefer
+    time.sleep(5) # Simulate the response generation process
+    response = f"Your prompt: {prompt}\n\nThis is a dummy response."
+    return response
 
 # Set up the Streamlit app
-st.set_page_config(page_title="Banana Dot Art Generator", page_icon="🍌", layout="wide")
+st.set_page_config(page_title="Banana Image Generator", page_icon="🍌", layout="wide")
 
 # Set the background color and style
 page_bg_img = '''
@@ -41,42 +52,42 @@ background-color: #333333;
 '''
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
-# Define the function to generate the dot art image
-def generate_dot_art(prompt):
-    # Define the size of the image
-    size = (400, 400)
-
-    # Create a new image with a white background
-    img = Image.new("RGB", size, "white")
-
-    # Get a drawing context for the image
-    draw = ImageDraw.Draw(img)
-
-    # Define the font and font size for the dots
-    font = ImageFont.truetype("arial.ttf", 10)
-
-    # Loop through each character in the prompt
-    for i, c in enumerate(prompt):
-        # Get the x and y coordinates for the dot based on the index of the character
-        x = (i % 20) * 20 + 10
-        y = (i // 20) * 20 + 10
-
-        # Draw a dot on the image using the character as the color
-        draw.rectangle([x, y, x+10, y+10], fill=c)
-
-    return img
+# Load the font file
+font_file = "PressStart2P-Regular.ttf"
+font = ImageFont.truetype(font_file, size=24)
 
 # Set up the navigation bar
-navigation = st.sidebar.radio("Navigation", ["Dot Art Generator", "Information", "Code Resources", "About Us"])
+navigation = st.sidebar.radio("Navigation", ["Image Generator", "Information", "Code Resources", "About Us"])
 
-# Create the dot art generator page
-if navigation == "Dot Art Generator":
-    st.title("Banana Dot Art Generator")
-    st.write("Enter a prompt and the dot art generator will create an image based on the prompt!")
+# Create the image generator page
+if navigation == "Image Generator":
+    st.title("Banana Image Generator")
+    st.write("Enter a prompt and the image generator will create an image based on the prompt!")
     # Create the text input and Generate button
     prompt = st.text_input("Prompt:")
     if st.button("Generate"):
         with st.spinner("Generating image..."):
-            # Generate the dot art image
-            img = generate_dot_art(prompt)
-            st.image(img, use_column_width=True)
+            # Insert your code here to generate the image
+            time.sleep(5) # Simulate the image generation process
+            img = Image.new('RGB', (400, 400), color = (255, 255, 255))
+            d = ImageDraw.Draw(img)
+            d.text((50, 200), prompt, font=font, fill=(0, 0, 0))
+            img_byte_arr = BytesIO()
+            img.save(img_byte_arr, format='PNG')
+            img_byte_arr = img_byte_arr.getvalue()
+            st.image(img_byte_arr, use_column_width=True)
+
+# Create the information page
+elif navigation == "Information":
+    st.title("Banana Information")
+    st.write("Bananas are a great source of potassium and other nutrients.")
+
+# Create the code resources page
+elif navigation == "Code Resources":
+    st.title("Banana Code Resources")
+    st.write("Here are some helpful resources for coding with bananas.")
+
+# Create the about us page
+else:
+    st.title("About Us")
+    st.write("We are a team of banana enthusiasts who love creating images with bananas.")
