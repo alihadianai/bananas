@@ -1,34 +1,21 @@
+import streamlit as st
 import requests
-from requests.structures import CaseInsensitiveDict
+from PIL import Image
+from io import BytesIO
+import time
+import torch
+import torch.nn as nn
+from torchvision.utils import save_image
+import random
+from urllib.request import urlopen
 
-import json
-
-QUERY_URL = "https://api.openai.com/v1/images/generations"
-
-def generate_image(prompt, api_key):
-    headers = CaseInsensitiveDict()
-    headers["Content-Type"] = "application/json"
-    headers["Authorization"] = f"Bearer {api_key}"
-
-    data = """
-    {
-        """
-    data += f'"model": "image-alpha-001",'
-    data += f'"prompt": "{prompt}",'
-    data += """
-        "num_images":1,
-        "size":"512x512",
-        "response_format":"url"
-    }
-    """
-
-    resp = requests.post(QUERY_URL, headers=headers, data=data)
-
-    if resp.status_code != 200:
-        raise ValueError("Failed to generate image "+resp.text)
-
-    response_text = json.loads(resp.text)
-    return response_text['data'][0]['url']
+# Define the function to generate the response
+def generate_response(prompt):
+    # Insert your code here to generate the response
+    # You can use any language model or API you prefer
+    time.sleep(5) # Simulate the response generation process
+    response = f"Your prompt: {prompt}\n\nThis is a dummy response."
+    return response
 
 # Set up the Streamlit app
 st.set_page_config(page_title="Banana Image Generator", page_icon="🍌", layout="wide")
@@ -37,31 +24,26 @@ st.set_page_config(page_title="Banana Image Generator", page_icon="🍌", layout
 page_bg_img = '''
 <style>
 body {
-background-color: #5b5b5b;
+background-color: #151515;
 color: white;
-font-family: 'Press Start 2P', cursive;
 }
 .stButton button {
 background-color: #ffbf00;
 }
 .stTextInput>div>div>input {
 color: red;
-font-family: 'Press Start 2P', cursive;
 }
 .stTextInput>div>label {
 color: white;
-font-family: 'Press Start 2P', cursive;
 }
 .stTextInput>div>div>div {
 background-color: #333333;
 }
 .stTextArea>div>div>textarea {
 color: white;
-font-family: 'Press Start 2P', cursive;
 }
 .stTextArea>div>label {
 color: white;
-font-family: 'Press Start 2P', cursive;
 }
 .stTextArea>div>div>div {
 background-color: #333333;
@@ -71,20 +53,49 @@ background-color: #333333;
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
 # Set up the navigation bar
-navigation = st.sidebar.radio("Navigation", ["Image Generator", "Information", "Code Resources", "About Us"])
+navigation = st.sidebar.radio("Navigation", ["Generate Banana Text Art", "Information", "Code Resources", "About Us"])
 
-# Create the image generator page
-if navigation == "Image Generator":
+# Create the text art generator page
+if navigation == "Generate Banana Text Art":
     st.title("Banana Image Generator")
-    st.write("Enter a prompt and the image generator will create an image based on the prompt!")
-    # Create the text input and Generate button
-    prompt = st.text_input("Prompt:")
+    st.write("Click the button to generate a random banana text art!")
+
+    # Load the dataset of banana text art from textart.sh
+    url = 'https://textart.sh/data/banana.txt'
+    response = urlopen(url)
+    dataset = response.read().decode('utf-8')
+    text_lines = dataset.split('\n')
+
+    # Define the DCGAN generator model
+    latent_dim = 100
+    img_shape = (32, 32)
+    channels = 1
+    generator = nn.Sequential(
+        nn.Linear(latent_dim, 128),
+        nn.LeakyReLU(0.2, inplace=True),
+        nn.Linear(128, 256),
+        nn.BatchNorm1d(256, 0.8),
+        nn.LeakyReLU(0.2, inplace=True),
+        nn.Linear(256, 512),
+        nn.BatchNorm1d(512, 0.8),
+        nn.LeakyReLU(0.2, inplace=True),
+        nn.Linear(512, 1024),
+        nn.BatchNorm1d(1024, 0.8),
+        nn.LeakyReLU(0.2, inplace=True),
+        nn.Linear(1024, int(img_shape[0] * img_shape[1] * channels)),
+        nn.Tanh()
+    )
+    # Load the pre-trained weights for the generator
+    generator.load_state_dict(torch.load('banana_generator.pth', map_location=torch.device('cpu')))
+    generator.eval()
+
+    # Generate a random banana text art
     if st.button("Generate"):
         with st.spinner("Generating image..."):
-            # Generate the image
-            image_url = generate_image(prompt, 'your_api_key_here')
-            try:
-                img = Image.open(BytesIO(requests.get(image_url).content))
-                st.image(img, use_column_width=True)
-            except:
-                st.warning("Unable to display image.")
+            # Generate a random noise vector
+            noise = torch.randn(1, latent_dim)
+
+            # Generate an image from the noise vector using the generator
+            img = generator(noise).view(img_shape)
+
+            # Convert the image tensor to a PIL image
