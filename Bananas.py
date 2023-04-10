@@ -60,6 +60,10 @@ def generate_response(prompt):
     response = f"Your prompt: {prompt}\n\nThis is a dummy response."
     return response
 
+# Define the function to generate the banana text art
+def generate_banana_text_art():
+    return random.choice(banana_text_art)
+
 # Set up the Streamlit app
 st.set_page_config(page_title="Banana Image Generator", page_icon="🍌", layout="wide")
 
