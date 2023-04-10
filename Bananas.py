@@ -13,40 +13,29 @@ def generate_response(prompt):
     return response
 
 # Set up the Streamlit app
-st.set_page_config(
-    page_title="Banana Chatbot",
-    page_icon=":banana:",
-    layout="wide"
-)
-
-# Set background color and font
-st.markdown("""
-    <style>
-    body {
-        background-color: #0041C2;
-        color: white;
-        font-family: 'Press Start 2P', cursive;
-        font-size: 16px;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-# Set up title and subtitle
+st.set_page_config(page_title="Banana Chatbot", page_icon=":banana:", layout="wide")
 st.title("Banana Chatbot")
-st.markdown("<h4 style='text-align: center; color: #FFC300'>Enter a prompt and the chatbot will respond!</h4>", unsafe_allow_html=True)
 
-# Set up the text input and Generate button
-prompt = st.text_input("Prompt:")
-if st.button("Generate", key="generate_btn"):
+# Set background image
+bg_image = Image.open("https://i.imgur.com/6dXHfu8.png")
+st.image(bg_image, use_column_width=True)
+
+# Set up input form
+form = st.form(key='my_form')
+prompt = form.text_input('Prompt')
+submit_button = form.form_submit_button(label='Generate')
+
+if submit_button:
     with st.spinner("Generating response..."):
         response = generate_response(prompt)
     st.success("Done!")
-    st.markdown(f"<p>{response}</p>", unsafe_allow_html=True)
+    st.write(response)
+
     # Download the image and display it
-    image_url = "https://imgtr.ee/images/2023/04/10/nQda2.png"
+    image_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
     response = requests.get(image_url)
     try:
         img = Image.open(BytesIO(response.content))
-        st.image(img, use_column_width=True)
+        st.image(img, width=200, caption='Generated Image')
     except:
         st.warning("Unable to display image.")
