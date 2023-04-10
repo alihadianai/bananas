@@ -15,30 +15,23 @@ def generate_response(prompt):
 # Set up the Streamlit app
 st.set_page_config(page_title="Banana Chatbot", page_icon="🍌", layout="wide")
 
-# Set the background image and dot art
-bg_image_url = "https://i.imgur.com/YsmU1l6.jpg"
-st.set_page_bg_image(bg_image_url)
+# Add custom CSS to set the background image
 st.markdown(
     """
     <style>
-        .stApp {
-            background-color: rgba(255, 255, 255, 0.8);
-        }
-        .banana {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 64px;
-            line-height: 1;
-            color: #FEE12B;
-            text-shadow: 2px 2px #666;
-            font-family: 'Press Start 2P', cursive;
-            z-index: 1000;
-        }
+    body {
+        background-image: url('https://imgtr.ee/images/2023/04/10/nQda2.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
     </style>
     """,
     unsafe_allow_html=True
 )
+
+# Set the app title and description
+st.title("Banana Chatbot")
+st.write("Enter a prompt and the chatbot will respond!")
 
 # Create the text input and Generate button
 prompt = st.text_input("Prompt:")
@@ -55,6 +48,3 @@ if st.button("Generate"):
         st.image(img, use_column_width=True)
     except:
         st.warning("Unable to display image.")
-        
-# Add the dot art of the small banana
-st.markdown('<p class="banana">.</p>', unsafe_allow_html=True)
