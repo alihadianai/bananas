@@ -1,5 +1,6 @@
 import streamlit as st
 import time
+from PIL import Image
 
 # Define the function to generate the response
 def generate_response(prompt):
@@ -21,3 +22,5 @@ if st.button("Generate"):
         response = generate_response(prompt)
     st.success("Done!")
     st.write(response)
+    # Display the image
+    st.image(Image.open("https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"), use_column_width=True)
