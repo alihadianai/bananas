@@ -13,33 +13,33 @@ def generate_response(prompt):
     return response
 
 # Set up the Streamlit app
-st.set_page_config(page_title="Banana Chatbot", page_icon="🍌", layout="wide")
+st.set_page_config(page_title="Banana Chatbot", page_icon=":banana:", layout="wide")
 
-# Set up the background image
-page_bg_img = '''
+# Set the background color and font
+page_bg = """
 <style>
 body {
-background-image: url("https://i.imgur.com/Lf0vOM4.png");
-background-size: cover;
+    background-color: #FF9900;
+    font-family: 'Comic Sans MS', sans-serif;
 }
 </style>
-'''
-st.markdown(page_bg_img, unsafe_allow_html=True)
+"""
+st.markdown(page_bg, unsafe_allow_html=True)
 
-# Set up the header
-st.write("<h1 style='text-align: center; color: red; font-family: Courier;'>Banana Chatbot</h1>", unsafe_allow_html=True)
+# Add the header
+st.image("https://i.imgur.com/3Mq6g8U.gif", use_column_width=True)
+st.subheader("Welcome to the Banana Chatbot!")
 
 # Create the text input and Generate button
-prompt = st.text_input("Prompt:", key="prompt")
+prompt = st.text_input("Say something to the chatbot...")
 if st.button("Generate"):
     with st.spinner("Generating response..."):
         response = generate_response(prompt)
     st.success("Done!")
-    st.write("<p style='color: blue; font-family: American Typewriter;'>Response:</p>", unsafe_allow_html=True)
-    st.write(f"<p style='font-family: American Typewriter;'>{response}</p>", unsafe_allow_html=True)
+    st.write(response)
 
-    # Download the image and display it
-    image_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
+    # Add a retro graphic
+    image_url = "https://i.imgur.com/j9E07Kf.png"
     response = requests.get(image_url)
     try:
         img = Image.open(BytesIO(response.content))
