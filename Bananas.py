@@ -26,10 +26,10 @@ color: white;
 background-color: #ffbf00;
 }
 .stTextInput>div>div>input {
-color: white;
+color: red;
 }
 .stTextInput>div>label {
-color: white;
+color: red;
 }
 .stTextInput>div>div>div {
 background-color: #333333;
@@ -38,7 +38,7 @@ background-color: #333333;
 color: white;
 }
 .stTextArea>div>label {
-color: white;
+color: red;
 }
 .stTextArea>div>div>div {
 background-color: #333333;
