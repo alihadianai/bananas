@@ -1,43 +1,37 @@
 import streamlit as st
-from PIL import Image, ImageDraw
+from PIL import Image
 import requests
 from io import BytesIO
 
-# Set page title
-st.set_page_config(page_title="Banana Generator", page_icon=":banana:")
+# Set page configuration
+st.set_page_config(
+    page_title="Banana Generator",
+    page_icon=":banana:",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
-# Set background image
-background_image = Image.open("https://i.ibb.co/b3DCgj1/background.jpg")
-st.image(background_image, use_column_width=True)
+# Load background image
+bg_image = Image.open("https://i.imgur.com/KiTSzRD.png")
+page_bg = st.image(bg_image, use_column_width=True)
 
-# Set page layout
-st.markdown("<h1 style='text-align: center; color: white;'>Banana Generator</h1>", unsafe_allow_html=True)
-st.write("")
+# Set sidebar
+st.sidebar.header("Parameters")
+prompt = st.sidebar.text_input("Enter prompt:", "A pixelated banana")
+generate = st.sidebar.button("Generate")
 
-# Create space for user input
-user_input = st.text_input("Write your prompt here:", "")
+# Set main page
+st.title("Banana Generator")
+st.markdown("---")
 
-# Generate button
-if st.button("Generate"):
-    # Display loading message
-    with st.spinner("Generating..."):
-        # Get dot art of a small banana
-        response = requests.get("https://thumbs.dreamstime.com/z/small-banana-icon-fruit-isolated-white-background-vector-illustration-154441025.jpg")
-        img = Image.open(BytesIO(response.content))
-        img = img.resize((100, 100))
-        draw = ImageDraw.Draw(img)
+if generate:
+    # Generate banana image
+    banana_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
+    response = requests.get(banana_url)
+    img = Image.open(BytesIO(response.content))
+    img = img.resize((200, 200))
+    st.image(img, caption="Pixelated banana", use_column_width=True)
 
-        # Set dot art parameters
-        color = (255, 255, 0)
-        diameter = 10
-        step = 2
-
-        # Create dot art
-        for x in range(step, img.width, step):
-            for y in range(step, img.height, step):
-                pixel = img.getpixel((x, y))
-                if pixel == (0, 0, 0):
-                    draw.ellipse((x - diameter, y - diameter, x + diameter, y + diameter), fill=color)
-
-        # Display generated image
-        st.image(img, use_column_width=True)
+# Add footer
+st.markdown("---")
+st.write("Built with Streamlit")
