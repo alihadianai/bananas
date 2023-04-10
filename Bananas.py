@@ -25,7 +25,7 @@ if st.button("Generate"):
     st.success("Done!")
     st.write(response)
     # Download the image and display it
-    image_url = "https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg"
+    image_url = "https://imgtr.ee/images/2023/04/10/nQda2.png"
     response = requests.get(image_url)
     img = Image.open(BytesIO(response.content))
     st.image(img, use_column_width=True)
