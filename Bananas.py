@@ -1,32 +1,23 @@
 import streamlit as st
-from PIL import Image
-import requests
-from io import BytesIO
 import time
 
-# Define the background image
-background_image_url = "https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg"
-
-# Define the function to generate the pixelated banana
-def generate_pixelated_banana(pixel_size):
-    # Insert your code here to generate the pixelated banana
-    # You can use any image processing library you prefer
-    time.sleep(5) # Simulate the image generation process
-    banana_image_url = "https://example.com/banana.jpg"
-    return banana_image_url
+# Define the function to generate the response
+def generate_response(prompt):
+    # Insert your code here to generate the response
+    # You can use any language model or API you prefer
+    time.sleep(5) # Simulate the response generation process
+    response = f"Your prompt: {prompt}\n\nThis is a dummy response."
+    return response
 
 # Set up the Streamlit app
-st.set_page_config(page_title="Pixelated Banana Generator", page_icon="🍌")
-st.markdown(f'<style>body{{background-image: url("{background_image_url}"); background-size: cover;}}</style>', unsafe_allow_html=True)
+st.set_page_config(page_title="Banana Chatbot", page_icon="🍌", layout="wide")
+st.title("Banana Chatbot")
+st.write("Enter a prompt and the chatbot will respond!")
 
-# Create the parameter input and Generate button
-with st.container():
-    response = requests.get(background_image_url)
-    background_image = Image.open(BytesIO(response.content))
-    st.image(background_image, use_column_width=True)
-    pixel_size = st.slider("Pixel size", 1, 100, 10, 1)
-    if st.button("Generate"):
-        with st.spinner("Generating pixelated banana..."):
-            banana_image_url = generate_pixelated_banana(pixel_size)
-        st.success("Done!")
-        st.image(background_image, use_column_width=True)
+# Create the text input and Generate button
+prompt = st.text_input("Prompt:")
+if st.button("Generate"):
+    with st.spinner("Generating response..."):
+        response = generate_response(prompt)
+    st.success("Done!")
+    st.write(response)
