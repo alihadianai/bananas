@@ -19,7 +19,7 @@ st.set_page_config(page_title="Banana Image Generator", page_icon="🍌", layout
 page_bg_img = '''
 <style>
 body {
-background-color: #5b5b5b;
+background-color: #151515;
 color: white;
 font-family: 'Press Start 2P', cursive;
 }
@@ -28,22 +28,18 @@ background-color: #ffbf00;
 }
 .stTextInput>div>div>input {
 color: red;
-font-family: 'Press Start 2P', cursive;
 }
 .stTextInput>div>label {
 color: white;
-font-family: 'Press Start 2P', cursive;
 }
 .stTextInput>div>div>div {
 background-color: #333333;
 }
 .stTextArea>div>div>textarea {
 color: white;
-font-family: 'Press Start 2P', cursive;
 }
 .stTextArea>div>label {
 color: white;
-font-family: 'Press Start 2P', cursive;
 }
 .stTextArea>div>div>div {
 background-color: #333333;
@@ -53,25 +49,32 @@ background-color: #333333;
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
 # Set up the navigation bar
-navigation = st.sidebar.radio("Navigation", ["Image Generator", "Information", "Code Resources", "About Us"])
+navigation = st.sidebar.radio("Navigation", ["Generate", "Information", "Code Resources", "About Us"])
 
-# Create the image generator page
-if navigation == "Image Generator":
+# Create the generate page
+if navigation == "Generate":
     st.title("Banana Image Generator")
-    st.write("Enter a prompt and the image generator will create an image based on the prompt!")
+    st.write("Enter a prompt and an image of a banana will be generated based on it!")
     # Create the text input and Generate button
     prompt = st.text_input("Prompt:")
     if st.button("Generate"):
         with st.spinner("Generating image..."):
             # Insert your code here to generate the image
-            time.sleep(5) # Simulate the image generation process
-            image_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
-            response = requests.get(image_url)
-            try:
-                img = Image.open(BytesIO(response.content))
-                st.image(img, use_column_width=True)
-            except:
-                st.warning("Unable to display image.")
+            # You can use any image generation model or API you prefer
+            # For this example, we'll just use a simple dot art banana
+            banana = Image.new('RGB', (300, 300), color = '#F7DC6F')
+            banana_pixels = banana.load()
+            for i in range(0, 300, 10):
+                for j in range(0, 300, 10):
+                    if (i in range(30, 270) and j in range(30, 270)) or (i in range(0, 60) and j in range(70, 200)):
+                        banana_pixels[i, j] = (255, 255, 255)
+                    elif i in range(90, 210) and j in range(120, 210):
+                        banana_pixels[i, j] = (255, 255, 255)
+            response_bytes = BytesIO()
+            banana.save(response_bytes, format='PNG')
+            response_bytes.seek(0)
+            st.image(response_bytes, use_column_width=True)
+        st.success("Done!")
 
 # Create the information page
 elif navigation == "Information":
@@ -86,4 +89,4 @@ elif navigation == "Code Resources":
 # Create the about us page
 else:
     st.title("About Us")
-    st.write("We are a team of banana enthusiasts who love creating images with bananas.")
+    st.write("We are a team of banana enthusiasts who love creating art and technology!")
