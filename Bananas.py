@@ -1,34 +1,43 @@
 import streamlit as st
+from PIL import Image, ImageDraw
 import requests
-from PIL import Image
 from io import BytesIO
-import time
 
-# Define the function to generate the response
-def generate_response(prompt):
-    # Insert your code here to generate the response
-    # You can use any language model or API you prefer
-    time.sleep(5) # Simulate the response generation process
-    response = f"Your prompt: {prompt}\n\nThis is a dummy response."
-    return response
+# Set page title
+st.set_page_config(page_title="Banana Generator", page_icon=":banana:")
 
-# Set up the Streamlit app
-st.set_page_config(page_title="Banana Chatbot", page_icon="🍌", layout="wide")
-st.title("Banana Chatbot")
-st.write("Enter a prompt and the chatbot will respond!")
+# Set background image
+background_image = Image.open("https://i.ibb.co/b3DCgj1/background.jpg")
+st.image(background_image, use_column_width=True)
 
-# Create the text input and Generate button
-prompt = st.text_input("Prompt:")
+# Set page layout
+st.markdown("<h1 style='text-align: center; color: white;'>Banana Generator</h1>", unsafe_allow_html=True)
+st.write("")
+
+# Create space for user input
+user_input = st.text_input("Write your prompt here:", "")
+
+# Generate button
 if st.button("Generate"):
-    with st.spinner("Generating response..."):
-        response = generate_response(prompt)
-    st.success("Done!")
-    st.write(response)
-    # Download the image and display it
-    image_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
-    response = requests.get(image_url)
-    try:
+    # Display loading message
+    with st.spinner("Generating..."):
+        # Get dot art of a small banana
+        response = requests.get("https://thumbs.dreamstime.com/z/small-banana-icon-fruit-isolated-white-background-vector-illustration-154441025.jpg")
         img = Image.open(BytesIO(response.content))
+        img = img.resize((100, 100))
+        draw = ImageDraw.Draw(img)
+
+        # Set dot art parameters
+        color = (255, 255, 0)
+        diameter = 10
+        step = 2
+
+        # Create dot art
+        for x in range(step, img.width, step):
+            for y in range(step, img.height, step):
+                pixel = img.getpixel((x, y))
+                if pixel == (0, 0, 0):
+                    draw.ellipse((x - diameter, y - diameter, x + diameter, y + diameter), fill=color)
+
+        # Display generated image
         st.image(img, use_column_width=True)
-    except:
-        st.warning("Unable to display image.")
