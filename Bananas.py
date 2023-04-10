@@ -13,29 +13,38 @@ def generate_response(prompt):
     return response
 
 # Set up the Streamlit app
-st.set_page_config(page_title="Banana Chatbot", page_icon=":banana:", layout="wide")
+st.set_page_config(page_title="Banana Chatbot", page_icon="🍌", layout="wide")
+
+# Add custom CSS to set the background image
+st.markdown(
+    """
+    <style>
+    body {
+        background-image: url('https://imgtr.ee/images/2023/04/10/nQda2.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Set the app title and description
 st.title("Banana Chatbot")
+st.write("Enter a prompt and the chatbot will respond!")
 
-# Set background image
-bg_image = Image.open("https://i.imgur.com/6dXHfu8.png")
-st.image(bg_image, use_column_width=True)
-
-# Set up input form
-form = st.form(key='my_form')
-prompt = form.text_input('Prompt')
-submit_button = form.form_submit_button(label='Generate')
-
-if submit_button:
+# Create the text input and Generate button
+prompt = st.text_input("Prompt:")
+if st.button("Generate"):
     with st.spinner("Generating response..."):
         response = generate_response(prompt)
     st.success("Done!")
     st.write(response)
-
     # Download the image and display it
     image_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
     response = requests.get(image_url)
     try:
         img = Image.open(BytesIO(response.content))
-        st.image(img, width=200, caption='Generated Image')
+        st.image(img, use_column_width=True)
     except:
         st.warning("Unable to display image.")
