@@ -1,6 +1,8 @@
 import streamlit as st
-import time
+import requests
 from PIL import Image
+from io import BytesIO
+import time
 
 # Define the function to generate the response
 def generate_response(prompt):
@@ -22,5 +24,8 @@ if st.button("Generate"):
         response = generate_response(prompt)
     st.success("Done!")
     st.write(response)
-    # Display the image
-    st.image(Image.open("https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg"), use_column_width=True)
+    # Download the image and display it
+    image_url = "https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg"
+    response = requests.get(image_url)
+    img = Image.open(BytesIO(response.content))
+    st.image(img, use_column_width=True)
