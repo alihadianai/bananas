@@ -1,16 +1,34 @@
-import streamlit as st
 import requests
-from PIL import Image, ImageDraw, ImageFont
-from io import BytesIO
-import time
+from requests.structures import CaseInsensitiveDict
 
-# Define the function to generate the response
-def generate_response(prompt):
-    # Insert your code here to generate the response
-    # You can use any language model or API you prefer
-    time.sleep(5) # Simulate the response generation process
-    response = f"Your prompt: {prompt}\n\nThis is a dummy response."
-    return response
+import json
+
+QUERY_URL = "https://api.openai.com/v1/images/generations"
+
+def generate_image(prompt, api_key):
+    headers = CaseInsensitiveDict()
+    headers["Content-Type"] = "application/json"
+    headers["Authorization"] = f"Bearer {api_key}"
+
+    data = """
+    {
+        """
+    data += f'"model": "image-alpha-001",'
+    data += f'"prompt": "{prompt}",'
+    data += """
+        "num_images":1,
+        "size":"512x512",
+        "response_format":"url"
+    }
+    """
+
+    resp = requests.post(QUERY_URL, headers=headers, data=data)
+
+    if resp.status_code != 200:
+        raise ValueError("Failed to generate image "+resp.text)
+
+    response_text = json.loads(resp.text)
+    return response_text['data'][0]['url']
 
 # Set up the Streamlit app
 st.set_page_config(page_title="Banana Image Generator", page_icon="🍌", layout="wide")
@@ -52,10 +70,6 @@ background-color: #333333;
 '''
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
-# Load the font file
-font_file = "PressStart2P-Regular.ttf"
-font = ImageFont.truetype(font_file, size=24)
-
 # Set up the navigation bar
 navigation = st.sidebar.radio("Navigation", ["Image Generator", "Information", "Code Resources", "About Us"])
 
@@ -67,27 +81,10 @@ if navigation == "Image Generator":
     prompt = st.text_input("Prompt:")
     if st.button("Generate"):
         with st.spinner("Generating image..."):
-            # Insert your code here to generate the image
-            time.sleep(5) # Simulate the image generation process
-            img = Image.new('RGB', (400, 400), color = (255, 255, 255))
-            d = ImageDraw.Draw(img)
-            d.text((50, 200), prompt, font=font, fill=(0, 0, 0))
-            img_byte_arr = BytesIO()
-            img.save(img_byte_arr, format='PNG')
-            img_byte_arr = img_byte_arr.getvalue()
-            st.image(img_byte_arr, use_column_width=True)
-
-# Create the information page
-elif navigation == "Information":
-    st.title("Banana Information")
-    st.write("Bananas are a great source of potassium and other nutrients.")
-
-# Create the code resources page
-elif navigation == "Code Resources":
-    st.title("Banana Code Resources")
-    st.write("Here are some helpful resources for coding with bananas.")
-
-# Create the about us page
-else:
-    st.title("About Us")
-    st.write("We are a team of banana enthusiasts who love creating images with bananas.")
+            # Generate the image
+            image_url = generate_image(prompt, 'your_api_key_here')
+            try:
+                img = Image.open(BytesIO(requests.get(image_url).content))
+                st.image(img, use_column_width=True)
+            except:
+                st.warning("Unable to display image.")
