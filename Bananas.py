@@ -53,7 +53,7 @@ background-color: #333333;
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
 # Set up the navigation bar
-navigation = st.sidebar.radio("Navigation", ["Image Generator", "Information", "Code Resources", "About Us"])
+navigation = st.sidebar.radio("Navigation", ["Image Generator", "Code Resources", "About Us"])
 
 # Create the image generator page
 if navigation == "Image Generator":
