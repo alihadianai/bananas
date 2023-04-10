@@ -63,56 +63,10 @@ if navigation == "Image Generator":
     prompt = st.text_input("Prompt:")
     if st.button("Generate"):
         with st.spinner("Generating image..."):
-            # Define the banana text art dataset
-                banana_text_art = [
-                    """
-                         _____
-                     .-'`     `'-.
-                    /  _      _   \\
-                   /   /      \   \\
-                  |   /        \   |
-                  |  |          |  |
-                  |  |          |  |
-                  |  |          |  |
-                   \  \        /  /
-                    \   `.__.'   /
-                     `-._____.-'`,
-                """,
-                    """
-                    ,-.      _,---._ __  / \
-                   /  )    ,'       `./ /   \
-                  (  (   ,\"`--.      / /     \\
-                   \  `-'      `,_  / /       \\
-                    `._           ` \"\\        :
-                       `\".          `.\\       |
-                        /      \"--._   \\       |
-                       /             `  \\      :
-                      /`._            |  |      \
-                     /               ||   \      \
-                    /                ||    \      \
-                  ,'                 ''     .     \
-                (_,-..__..._         .-\"`-._ `\"-._/ 
-                           `\"\"---~~`        `~~\"\"` 
-                """,
-                    """
-                   /\_/\
-                  ( o o )
-                 ( =^= ) 
-                  (\"_\"_) 
-                """,
-                    """
-                  .-^-.
-                 /_/_\_\
-                ' ' | ` `
-                    J
-                   / \
-                  /   \
-                """,
-                ]
-
-                # Define the function to generate the banana text art
-                def generate_banana_text_art():
-                    return random.choice(banana_text_art)
+            # Insert your code here to generate the image
+            time.sleep(5) # Simulate the image generation process
+            image_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
+            response = requests.get(image_url)
             try:
                 img = Image.open(BytesIO(response.content))
                 st.image(img, use_column_width=True)
