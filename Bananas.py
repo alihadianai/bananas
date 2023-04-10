@@ -1,5 +1,7 @@
 import streamlit as st
 from PIL import Image
+import requests
+from io import BytesIO
 import time
 
 # Define the background image
@@ -19,10 +21,12 @@ st.markdown(f'<style>body{{background-image: url("{background_image_url}"); back
 
 # Create the parameter input and Generate button
 with st.container():
-    st.image(Image.open("https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg"), use_column_width=True)
+    response = requests.get(background_image_url)
+    background_image = Image.open(BytesIO(response.content))
+    st.image(background_image, use_column_width=True)
     pixel_size = st.slider("Pixel size", 1, 100, 10, 1)
     if st.button("Generate"):
         with st.spinner("Generating pixelated banana..."):
             banana_image_url = generate_pixelated_banana(pixel_size)
         st.success("Done!")
-        st.image(Image.open("https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg"), use_column_width=True)
+        st.image(background_image, use_column_width=True)
