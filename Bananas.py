@@ -3,6 +3,54 @@ import requests
 from PIL import Image
 from io import BytesIO
 import time
+import random
+
+# Define the banana text art dataset
+banana_text_art = [
+    """
+         _____
+     .-'`     `'-.
+    /  _      _   \\
+   /   /      \   \\
+  |   /        \   |
+  |  |          |  |
+  |  |          |  |
+  |  |          |  |
+   \  \        /  /
+    \   `.__.'   /
+     `-._____.-'`,
+""",
+    """
+    ,-.      _,---._ __  / \
+   /  )    ,'       `./ /   \
+  (  (   ,\"`--.      / /     \\
+   \  `-'      `,_  / /       \\
+    `._           ` \"\\        :
+       `\".          `.\\       |
+        /      \"--._   \\       |
+       /             `  \\      :
+      /`._            |  |      \
+     /               ||   \      \
+    /                ||    \      \
+  ,'                 ''     .     \
+(_,-..__..._         .-\"`-._ `\"-._/ 
+           `\"\"---~~`        `~~\"\"` 
+""",
+    """
+   /\_/\
+  ( o o )
+ ( =^= ) 
+  (\"_\"_) 
+""",
+    """
+  .-^-.
+ /_/_\_\
+' ' | ` `
+    J
+   / \
+  /   \
+""",
+]
 
 # Define the function to generate the response
 def generate_response(prompt):
@@ -63,54 +111,8 @@ if navigation == "Image Generator":
     prompt = st.text_input("Prompt:")
     if st.button("Generate"):
         with st.spinner("Generating image..."):
-            # Define the banana text art dataset
-            banana_text_art = [
-                """
-                     _____
-                 .-'`     `'-.
-                /  _      _   \\
-               /   /      \   \\
-              |   /        \   |
-              |  |          |  |
-              |  |          |  |
-              |  |          |  |
-               \  \        /  /
-                \   `.__.'   /
-                 `-._____.-'`,
-            """,
-                """
-                ,-.      _,---._ __  / \
-               /  )    ,'       `./ /   \
-              (  (   ,\"`--.      / /     \\
-               \  `-'      `,_  / /       \\
-                `._           ` \"\\        :
-                   `\".          `.\\       |
-                    /      \"--._   \\       |
-                   /             `  \\      :
-                  /`._            |  |      \
-                 /               ||   \      \
-                /                ||    \      \
-              ,'                 ''     .     \
-            (_,-..__..._         .-\"`-._ `\"-._/ 
-                       `\"\"---~~`        `~~\"\"` 
-            """,
-                """
-               /\_/\
-              ( o o )
-             ( =^= ) 
-              (\"_\"_) 
-            """,
-                """
-              .-^-.
-             /_/_\_\
-            ' ' | ` `
-                J
-               / \
-              /   \
-            """,
-            ]
-
-            # Define the function to generate the banana text art
+            # Insert your code here to generate the image
+            time.sleep(5) # Simulate the image generation process
             def generate_banana_text_art():
             response = random.choice(banana_text_art)
             try:
