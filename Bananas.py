@@ -27,18 +27,18 @@ font-family: 'Press Start 2P', cursive;
 background-color: #ffbf00;
 }
 .stTextInput>div>div>input {
-color: red;
+color: #46afdb;
 font-family: 'Press Start 2P', cursive;
 }
 .stTextInput>div>label {
-color: white;
+color: #46afdb;
 font-family: 'Press Start 2P', cursive;
 }
 .stTextInput>div>div>div {
-background-color: #333333;
+background-color: #46afdb;
 }
 .stTextArea>div>div>textarea {
-color: white;
+color: #46afdb;
 font-family: 'Press Start 2P', cursive;
 }
 .stTextArea>div>label {
@@ -46,7 +46,7 @@ color: white;
 font-family: 'Press Start 2P', cursive;
 }
 .stTextArea>div>div>div {
-background-color: #333333;
+background-color: #46afdb;
 }
 </style>
 '''
