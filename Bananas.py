@@ -13,80 +13,56 @@ def generate_response(prompt):
     return response
 
 # Set up the Streamlit app
-st.set_page_config(page_title="AI Image Generator", page_icon="🎨", layout="wide")
+st.set_page_config(page_title="Banana AI Image Generator", page_icon="🍌", layout="wide")
+st.markdown(
+    """
+    <style>
+        .stApp {
+            background-image: url('https://i.imgur.com/lxJuCzk.png');
+            background-size: cover;
+            background-position: center;
+        }
+        .stTextInput input {
+            color: red;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+st.title("Banana AI Image Generator")
+st.write("Please generate an image using Stable Diffusion!")
 
-# Set up the navigation bar
-st.markdown("""
-<style>
-nav {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    background-color: #330033;
-    color: white;
-}
+# Create the text input and Generate button
+default_prompt = "Please generate a sci-fi animation with Spielberg director style."
+prompt = st.text_input("Prompt:", default_prompt)
+if st.button("Generate"):
+    with st.spinner("Generating response..."):
+        response = generate_response(prompt)
+    st.success("Done!")
+    st.write(response)
+    # Download the image and display it
+    image_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
+    response = requests.get(image_url)
+    try:
+        img = Image.open(BytesIO(response.content))
+        st.image(img, use_column_width=True)
+    except:
+        st.warning("Unable to display image.")
 
-nav a {
-    color: white;
-    text-decoration: none;
-}
+# Create the navigation bar
+navigation = ["Chat", "Information", "Code Resource", "Terms"]
+choice = st.sidebar.selectbox("Navigation", navigation)
 
-nav a:hover {
-    text-decoration: underline;
-}
-
-</style>
-""", unsafe_allow_html=True)
-
-nav_pages = {
-    "Chat": "chat",
-    "Information": "info",
-    "Code Resources": "code",
-    "About Us": "about"
-}
-
-page = st.sidebar.selectbox("Select a page", list(nav_pages.keys()))
-
-nav_html = "<nav>"
-for name, url in nav_pages.items():
-    if url == page:
-        nav_html += f'<strong>{name}</strong>'
-    else:
-        nav_html += f'<a href="/{url}">{name}</a>'
-nav_html += "</nav>"
-
-st.markdown(nav_html, unsafe_allow_html=True)
-
-# Create the page content based on the selected page
-if page == "chat":
-    st.title("AI Image Generator")
-    st.write("Enter a prompt and the AI will generate an image!")
-    st.write("For example: 'Generate a sci-fi animation with Spielberg's director style'")
-    # Create the text input and Generate button
-    prompt = st.text_input("Prompt:", value="Generate a sci-fi animation with Spielberg's director style", max_chars=None, key=None, type='default', help=None, placeholder=None, on_change=None, args=None, kwargs=None)
-    prompt_text = prompt_css = '<p style="color:red;">' + prompt + '</p>'
-    if st.button("Generate"):
-        with st.spinner("Generating image..."):
-            response = generate_response(prompt)
-        st.success("Done!")
-        st.write(response)
-        # Download the image and display it
-        image_url = "https://imgtr.ee/images/2023/04/10/nQda2.png"
-        response = requests.get(image_url)
-        try:
-            img = Image.open(BytesIO(response.content))
-            st.image(img, use_column_width=True)
-        except:
-            st.warning("Unable to display image.")
-elif page == "info":
-    st.title("Information")
-    st.write("This is the information page.")
-    st.write("Here you can find information about the AI image generator.")
-elif page == "code":
-    st.title("Code Resources")
-    st.write("This is the code resources page.")
-    st.write("Here you can find links to the code used to build the AI image generator.")
-elif page == "about":
-    st.title("About Us")
-    st.write("This is the about us page.")
-    st.write("Here you can find information about the creators of the AI image generator.")
+# Create the pages
+if choice == "Chat":
+    st.write("Welcome to the chat page!")
+    st.write("Here you can chat with our AI image generator and generate amazing images!")
+elif choice == "Information":
+    st.write("Welcome to the information page!")
+    st.write("Here you can find information about our AI image generator and how it works.")
+elif choice == "Code Resource":
+    st.write("Welcome to the code resource page!")
+    st.write("Here you can find the code for our AI image generator and other resources.")
+elif choice == "Terms":
+    st.write("Welcome to the terms page!")
+    st.write("Here you can find the terms and conditions for using our AI image generator.")
