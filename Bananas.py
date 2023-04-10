@@ -14,17 +14,26 @@ def generate_response(prompt):
 
 # Set up the Streamlit app
 st.set_page_config(page_title="Banana Chatbot", page_icon="🍌", layout="wide")
-st.title("Banana Chatbot")
+st.markdown("""
+<style>
+body {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect fill='%23fc0' width='50' height='50'/%3E%3Crect fill='%23fc0' x='50' y='50' width='50' height='50'/%3E%3Crect fill='%23f80' x='50' width='50' height='50'/%3E%3Crect fill='%23f80' y='50' width='50' height='50'/%3E%3C/svg%3E");
+}
+</style>
+""", unsafe_allow_html=True)
 
-# Define the function to show the Home page
-def show_home():
-    st.write("Welcome to the Banana Chatbot!")
-    st.write("This app generates responses to your prompts using a language model.")
-    st.write("Click on the Chat button to start chatting!")
-    
-# Define the function to show the Chat page
-def show_chat():
-    # Create the text input and Generate button
+PAGES = {
+    "Home": st.markdown("# Home\n\nWelcome to the Banana Chatbot!"),
+    "Chat": st.markdown("# Chat\n\nEnter a prompt and the chatbot will respond!"),
+    "About": st.markdown("# About\n\nThis app was created by John Doe.")
+}
+
+# Create the text input and Generate button
+page = st.sidebar.selectbox("Select a page", ["Home", "Chat", "About"])
+
+if page == "Home":
+    st.sidebar.markdown("This is the home page")
+elif page == "Chat":
     prompt = st.text_input("Prompt:")
     if st.button("Generate"):
         with st.spinner("Generating response..."):
@@ -32,26 +41,12 @@ def show_chat():
         st.success("Done!")
         st.write(response)
         # Download the image and display it
-        image_url = "https://imgtr.ee/images/2023/04/10/nQda2.png"
+        image_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
         response = requests.get(image_url)
         try:
             img = Image.open(BytesIO(response.content))
             st.image(img, use_column_width=True)
         except:
             st.warning("Unable to display image.")
-    
-# Define the function to show the About page
-def show_about():
-    st.write("This app was created by [Your Name Here].")
-    st.write("It uses Streamlit and a language model to generate responses to your prompts.")
-
-# Create the navigation buttons
-nav = st.sidebar.radio("Select a page:", ["Home", "Chat", "About"])
-
-# Show the appropriate page based on the user's selection
-if nav == "Home":
-    show_home()
-elif nav == "Chat":
-    show_chat()
-elif nav == "About":
-    show_about()
+else:
+    st.sidebar.markdown("This is the about page")
