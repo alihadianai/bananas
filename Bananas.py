@@ -13,59 +13,40 @@ def generate_response(prompt):
     return response
 
 # Set up the Streamlit app
-st.set_page_config(page_title="Banana Chatbot", page_icon=":banana:", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(
+    page_title="Banana Chatbot",
+    page_icon=":banana:",
+    layout="wide"
+)
+
+# Set background color and font
 st.markdown("""
     <style>
-        .main {
-            background-color: #292A2D;
-            background-image: url('https://i.imgur.com/YxQm46M.png');
-            background-size: cover;
-            background-position: center center;
-        }
-        .stTextInput {
-            background-color: #3C3D3F;
-            color: #F1F1F1;
-            font-family: 'Press Start 2P', cursive;
-        }
-        .stButton>button {
-            background-color: #FECE4E;
-            color: #292A2D;
-            font-weight: bold;
-            font-family: 'Press Start 2P', cursive;
-        }
-        .stSuccess {
-            color: #FECE4E;
-        }
-        .stWarning {
-            color: #FF5F5F;
-        }
-        .stImage {
-            margin-top: 20px;
-        }
-        .stText {
-            color: #F1F1F1;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 20px;
-            line-height: 1.5;
-        }
+    body {
+        background-color: #0041C2;
+        color: white;
+        font-family: 'Press Start 2P', cursive;
+        font-size: 16px;
+    }
     </style>
 """, unsafe_allow_html=True)
 
-# Set up the sidebar
-st.sidebar.markdown("<h1 style='color: #F1F1F1; font-family: \"Press Start 2P\", cursive;'>Banana Chatbot</h1>", unsafe_allow_html=True)
-st.sidebar.markdown("<hr style='border-top: 2px solid #FECE4E; margin: 10px 0;'>", unsafe_allow_html=True)
-st.sidebar.write("Enter a prompt and the chatbot will respond!")
-prompt = st.sidebar.text_input("", "", max_chars=50)
-if st.sidebar.button("Generate"):
+# Set up title and subtitle
+st.title("Banana Chatbot")
+st.markdown("<h4 style='text-align: center; color: #FFC300'>Enter a prompt and the chatbot will respond!</h4>", unsafe_allow_html=True)
+
+# Set up the text input and Generate button
+prompt = st.text_input("Prompt:")
+if st.button("Generate", key="generate_btn"):
     with st.spinner("Generating response..."):
         response = generate_response(prompt)
     st.success("Done!")
-    st.markdown(f"<p class='stText'>{response}</p>", unsafe_allow_html=True)
+    st.markdown(f"<p>{response}</p>", unsafe_allow_html=True)
     # Download the image and display it
-    image_url = "https://i.imgur.com/nDCKhJd.png"
+    image_url = "https://imgtr.ee/images/2023/04/10/nQda2.png"
     response = requests.get(image_url)
     try:
         img = Image.open(BytesIO(response.content))
-        st.image(img, use_column_width=True, caption="Banana Chatbot")
+        st.image(img, use_column_width=True)
     except:
         st.warning("Unable to display image.")
