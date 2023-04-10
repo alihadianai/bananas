@@ -1,24 +1,56 @@
+# Import the necessary libraries
 import streamlit as st
 import requests
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
-import time
-import torch
-import torch.nn as nn
-from torchvision.utils import save_image
 import random
-from urllib.request import urlopen
+import time
+
+# Define the function to generate the banana text art
+def generate_banana_text(prompt):
+    # Define the URL of the banana text art website
+    url = f"https://textart.sh/topic/{prompt}"
+    response = requests.get(url)
+    # Check if the website returns a valid response
+    if response.status_code != 200:
+        return None
+    # Parse the text art from the HTML response
+    html = response.content.decode("utf-8")
+    start_tag = "<div class=\"post_text\" itemprop=\"text\">"
+    end_tag = "</div>"
+    start_index = html.find(start_tag)
+    end_index = html.find(end_tag, start_index)
+    if start_index == -1 or end_index == -1:
+        return None
+    text_art = html[start_index + len(start_tag) : end_index]
+    return text_art
 
 # Define the function to generate the response
 def generate_response(prompt):
-    # Insert your code here to generate the response
-    # You can use any language model or API you prefer
-    time.sleep(5) # Simulate the response generation process
-    response = f"Your prompt: {prompt}\n\nThis is a dummy response."
-    return response
+    # Generate a random banana text art
+    text_art = generate_banana_text(prompt)
+    # If the text art is None, return an error message
+    if text_art is None:
+        return "Sorry, we could not generate a banana text art for that prompt."
+    # Define the font and size for the text art
+    font_path = "fonts/PressStart2P-Regular.ttf"
+    font_size = 12
+    font = ImageFont.truetype(font_path, font_size)
+    # Define the width and height for the image
+    width, height = font.getsize(text_art)
+    width += 10
+    height += 10
+    # Create the image and draw the text art on it
+    img = Image.new("RGB", (width, height), color="#151515")
+    draw = ImageDraw.Draw(img)
+    draw.text((5, 5), text_art, font=font, fill=(255, 191, 0))
+    # Convert the image to bytes and return it
+    img_bytes = BytesIO()
+    img.save(img_bytes, format="PNG")
+    return img_bytes.getvalue()
 
 # Set up the Streamlit app
-st.set_page_config(page_title="Banana Image Generator", page_icon="🍌", layout="wide")
+st.set_page_config(page_title="Banana Text Art Generator", page_icon="🍌", layout="wide")
 
 # Set the background color and style
 page_bg_img = '''
@@ -26,6 +58,7 @@ page_bg_img = '''
 body {
 background-color: #151515;
 color: white;
+font-family: "Press Start 2P", cursive;
 }
 .stButton button {
 background-color: #ffbf00;
@@ -53,49 +86,13 @@ background-color: #333333;
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
 # Set up the navigation bar
-navigation = st.sidebar.radio("Navigation", ["Generate Banana Text Art", "Information", "Code Resources", "About Us"])
+navigation = st.sidebar.radio("Navigation", ["Generator", "Information", "Code Resources", "About Us"])
 
-# Create the text art generator page
-if navigation == "Generate Banana Text Art":
-    st.title("Banana Image Generator")
-    st.write("Click the button to generate a random banana text art!")
-
-    # Load the dataset of banana text art from textart.sh
-    url = 'https://textart.sh/data/banana.txt'
-    response = urlopen(url)
-    dataset = response.read().decode('utf-8')
-    text_lines = dataset.split('\n')
-
-    # Define the DCGAN generator model
-    latent_dim = 100
-    img_shape = (32, 32)
-    channels = 1
-    generator = nn.Sequential(
-        nn.Linear(latent_dim, 128),
-        nn.LeakyReLU(0.2, inplace=True),
-        nn.Linear(128, 256),
-        nn.BatchNorm1d(256, 0.8),
-        nn.LeakyReLU(0.2, inplace=True),
-        nn.Linear(256, 512),
-        nn.BatchNorm1d(512, 0.8),
-        nn.LeakyReLU(0.2, inplace=True),
-        nn.Linear(512, 1024),
-        nn.BatchNorm1d(1024, 0.8),
-        nn.LeakyReLU(0.2, inplace=True),
-        nn.Linear(1024, int(img_shape[0] * img_shape[1] * channels)),
-        nn.Tanh()
-    )
-    # Load the pre-trained weights for the generator
-    generator.load_state_dict(torch.load('banana_generator.pth', map_location=torch.device('cpu')))
-    generator.eval()
-
-    # Generate a random banana text art
+# Create the generator page
+if navigation == "Generator":
+    st.title("Banana Text Art Generator")
+    st.write("Enter a prompt and we'll generate a random banana text art!")
+    # Create the text input and Generate button
+    prompt = st.text_input("Prompt:")
     if st.button("Generate"):
-        with st.spinner("Generating image..."):
-            # Generate a random noise vector
-            noise = torch.randn(1, latent_dim)
-
-            # Generate an image from the noise vector using the generator
-            img = generator(noise).view(img_shape)
-
-            # Convert the image tensor to a PIL image
+        with
