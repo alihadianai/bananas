@@ -13,56 +13,74 @@ def generate_response(prompt):
     return response
 
 # Set up the Streamlit app
-st.set_page_config(page_title="Banana AI Image Generator", page_icon="🍌", layout="wide")
-st.markdown(
-    """
-    <style>
-        .stApp {
-            background-image: url('https://i.imgur.com/lxJuCzk.png');
-            background-size: cover;
-            background-position: center;
-        }
-        .stTextInput input {
-            color: red;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-st.title("Banana AI Image Generator")
-st.write("Please generate an image using Stable Diffusion!")
+st.set_page_config(page_title="Banana Chatbot", page_icon="🍌", layout="wide")
 
-# Create the text input and Generate button
-default_prompt = "Please write your prompt here."
-prompt = st.text_input("Prompt:", default_prompt)
-if st.button("Generate"):
-    with st.spinner("Generating response..."):
-        response = generate_response(prompt)
-    st.success("Done!")
-    st.write(response)
-    # Download the image and display it
-    image_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
-    response = requests.get(image_url)
-    try:
-        img = Image.open(BytesIO(response.content))
-        st.image(img, use_column_width=True)
-    except:
-        st.warning("Unable to display image.")
+# Set the background color and style
+page_bg_img = '''
+<style>
+body {
+background-color: #151515;
+color: white;
+}
+.stButton button {
+background-color: #ffbf00;
+}
+.stTextInput>div>div>input {
+color: white;
+}
+.stTextInput>div>label {
+color: white;
+}
+.stTextInput>div>div>div {
+background-color: #333333;
+}
+.stTextArea>div>div>textarea {
+color: white;
+}
+.stTextArea>div>label {
+color: white;
+}
+.stTextArea>div>div>div {
+background-color: #333333;
+}
+</style>
+'''
+st.markdown(page_bg_img, unsafe_allow_html=True)
 
-# Create the navigation bar
-navigation = ["Chat", "Information", "Code Resource", "Terms"]
-choice = st.sidebar.selectbox("Navigation", navigation)
+# Set up the navigation bar
+navigation = st.sidebar.radio("Navigation", ["Chat", "Information", "Code Resources", "About Us"])
 
-# Create the pages
-if choice == "Chat":
-    st.write("Welcome to the chat page!")
-    st.write("Here you can chat with our AI image generator and generate amazing images!")
-elif choice == "Information":
-    st.write("Welcome to the information page!")
-    st.write("Here you can find information about our AI image generator and how it works.")
-elif choice == "Code Resource":
-    st.write("Welcome to the code resource page!")
-    st.write("Here you can find the code for our AI image generator and other resources.")
-elif choice == "Terms":
-    st.write("Welcome to the terms page!")
-    st.write("Here you can find the terms and conditions for using our AI image generator.")
+# Create the chat page
+if navigation == "Chat":
+    st.title("Banana Chatbot")
+    st.write("Enter a prompt and the chatbot will respond!")
+    # Create the text input and Generate button
+    prompt = st.text_input("Prompt:")
+    if st.button("Generate"):
+        with st.spinner("Generating response..."):
+            response = generate_response(prompt)
+        st.success("Done!")
+        st.write(response)
+        # Download the image and display it
+        image_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
+        response = requests.get(image_url)
+        try:
+            img = Image.open(BytesIO(response.content))
+            st.image(img, use_column_width=True)
+        except:
+            st.warning("Unable to display image.")
+
+# Create the information page
+elif navigation == "Information":
+    st.title("Banana Information")
+    st.write("Bananas are a great source of potassium and other nutrients.")
+
+# Create the code resources page
+elif navigation == "Code Resources":
+    st.title("Banana Code Resources")
+    st.write("Here are some helpful resources for coding with bananas.")
+
+# Create the about us page
+else:
+    st.title("About Us")
+    st.write("We are a team of banana enthusiasts who love creating chatbots.")
