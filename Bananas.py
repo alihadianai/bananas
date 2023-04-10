@@ -23,4 +23,4 @@ if st.button("Generate"):
     st.success("Done!")
     st.write(response)
     # Display the image
-    st.image(Image.open("https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"), use_column_width=True)
+    st.image(Image.open("https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg"), use_column_width=True)
