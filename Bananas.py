@@ -14,52 +14,57 @@ def generate_response(prompt):
 
 # Set up the Streamlit app
 st.set_page_config(page_title="Banana Image Generator", page_icon="🍌", layout="wide")
-st.title("Banana Image Generator")
-st.write("Enter a prompt and the image generator will create an image!")
 
-# Set the background color and font
-page_bg_color = '''
+# Set the background color and style
+page_bg_img = '''
 <style>
 body {
-background-color: #e6e6e6;
-font-family: "Brush Script MT", cursive;
+background-color: #5b5b5b;
+color: white;
+font-family: 'Press Start 2P', cursive;
+}
+.stButton button {
+background-color: #ffbf00;
+}
+.stTextInput>div>div>input {
+color: red;
+font-family: 'Press Start 2P', cursive;
+}
+.stTextInput>div>label {
+color: white;
+font-family: 'Press Start 2P', cursive;
+}
+.stTextInput>div>div>div {
+background-color: #333333;
+}
+.stTextArea>div>div>textarea {
+color: white;
+font-family: 'Press Start 2P', cursive;
+}
+.stTextArea>div>label {
+color: white;
+font-family: 'Press Start 2P', cursive;
+}
+.stTextArea>div>div>div {
+background-color: #333333;
 }
 </style>
 '''
-st.markdown(page_bg_color, unsafe_allow_html=True)
+st.markdown(page_bg_img, unsafe_allow_html=True)
 
-# Create the text input and Generate button
-prompt = st.text_input("Prompt:", key="prompt_input")
-prompt_style = "<style> .css-1yqbge4 { color: red; font-size: 24px; }</style>"
-st.markdown(prompt_style, unsafe_allow_html=True)
+# Set up the navigation bar
+navigation = st.sidebar.radio("Navigation", ["Image Generator", "Information", "Code Resources", "About Us"])
 
-if st.button("Generate"):
-    with st.spinner("Generating image..."):
-        # Insert your code here to generate the image
-        # You can use any image generation model or API you prefer
-        image_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
-        response = requests.get(image_url)
-        try:
-            img = Image.open(BytesIO(response.content))
-            st.image(img, use_column_width=True)
-        except:
-            st.warning("Unable to display image.")
-
-# Create the navigation bar
-menu = ["Image Generator", "Information", "Code Resources", "About Us"]
-choice = st.sidebar.selectbox("Select a page", menu)
-
-# Display the selected page
-if choice == "Image Generator":
-    st.write("Enter a prompt and the image generator will create an image!")
-    prompt = st.text_input("Prompt:", key="prompt_input")
-    prompt_style = "<style> .css-1yqbge4 { color: red; font-size: 24px; }</style>"
-    st.markdown(prompt_style, unsafe_allow_html=True)
-
+# Create the image generator page
+if navigation == "Image Generator":
+    st.title("Banana Image Generator")
+    st.write("Enter a prompt and the image generator will create an image based on the prompt!")
+    # Create the text input and Generate button
+    prompt = st.text_input("Prompt:")
     if st.button("Generate"):
         with st.spinner("Generating image..."):
             # Insert your code here to generate the image
-            # You can use any image generation model or API you prefer
+            time.sleep(5) # Simulate the image generation process
             image_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
             response = requests.get(image_url)
             try:
@@ -67,15 +72,18 @@ if choice == "Image Generator":
                 st.image(img, use_column_width=True)
             except:
                 st.warning("Unable to display image.")
-                
-elif choice == "Information":
-    st.write("This is the information page.")
-    st.write("Here you can find more information about our image generator.")
-    
-elif choice == "Code Resources":
-    st.write("This is the code resources page.")
-    st.write("Here you can find resources and examples of code for creating your own image generator.")
-    
-elif choice == "About Us":
-    st.write("This is the about us page.")
-    st.write("Here you can learn more about our team and the development of this image generator.")
+
+# Create the information page
+elif navigation == "Information":
+    st.title("Banana Information")
+    st.write("Bananas are a great source of potassium and other nutrients.")
+
+# Create the code resources page
+elif navigation == "Code Resources":
+    st.title("Banana Code Resources")
+    st.write("Here are some helpful resources for coding with bananas.")
+
+# Create the about us page
+else:
+    st.title("About Us")
+    st.write("We are a team of banana enthusiasts who love creating images with bananas.")
