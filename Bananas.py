@@ -64,55 +64,55 @@ if navigation == "Image Generator":
     if st.button("Generate"):
         with st.spinner("Generating image..."):
             # Define the banana text art dataset
-banana_text_art = [
-    """
-         _____
-     .-'`     `'-.
-    /  _      _   \\
-   /   /      \   \\
-  |   /        \   |
-  |  |          |  |
-  |  |          |  |
-  |  |          |  |
-   \  \        /  /
-    \   `.__.'   /
-     `-._____.-'`,
-""",
-    """
-    ,-.      _,---._ __  / \
-   /  )    ,'       `./ /   \
-  (  (   ,\"`--.      / /     \\
-   \  `-'      `,_  / /       \\
-    `._           ` \"\\        :
-       `\".          `.\\       |
-        /      \"--._   \\       |
-       /             `  \\      :
-      /`._            |  |      \
-     /               ||   \      \
-    /                ||    \      \
-  ,'                 ''     .     \
-(_,-..__..._         .-\"`-._ `\"-._/ 
-           `\"\"---~~`        `~~\"\"` 
-""",
-    """
-   /\_/\
-  ( o o )
- ( =^= ) 
-  (\"_\"_) 
-""",
-    """
-  .-^-.
- /_/_\_\
-' ' | ` `
-    J
-   / \
-  /   \
-""",
-]
+                banana_text_art = [
+                    """
+                         _____
+                     .-'`     `'-.
+                    /  _      _   \\
+                   /   /      \   \\
+                  |   /        \   |
+                  |  |          |  |
+                  |  |          |  |
+                  |  |          |  |
+                   \  \        /  /
+                    \   `.__.'   /
+                     `-._____.-'`,
+                """,
+                    """
+                    ,-.      _,---._ __  / \
+                   /  )    ,'       `./ /   \
+                  (  (   ,\"`--.      / /     \\
+                   \  `-'      `,_  / /       \\
+                    `._           ` \"\\        :
+                       `\".          `.\\       |
+                        /      \"--._   \\       |
+                       /             `  \\      :
+                      /`._            |  |      \
+                     /               ||   \      \
+                    /                ||    \      \
+                  ,'                 ''     .     \
+                (_,-..__..._         .-\"`-._ `\"-._/ 
+                           `\"\"---~~`        `~~\"\"` 
+                """,
+                    """
+                   /\_/\
+                  ( o o )
+                 ( =^= ) 
+                  (\"_\"_) 
+                """,
+                    """
+                  .-^-.
+                 /_/_\_\
+                ' ' | ` `
+                    J
+                   / \
+                  /   \
+                """,
+                ]
 
-# Define the function to generate the banana text art
-def generate_banana_text_art():
-    return random.choice(banana_text_art)
+                # Define the function to generate the banana text art
+                def generate_banana_text_art():
+                    return random.choice(banana_text_art)
             try:
                 img = Image.open(BytesIO(response.content))
                 st.image(img, use_column_width=True)
