@@ -10,7 +10,7 @@ def generate_pixelated_banana(pixel_size):
     # Insert your code here to generate the pixelated banana
     # You can use any image processing library you prefer
     time.sleep(5) # Simulate the image generation process
-    banana_image_url = "https://example.com/banana.jpg"
+    banana_image_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
     return banana_image_url
 
 # Set up the Streamlit app
@@ -19,7 +19,7 @@ st.markdown(f'<style>body{{background-image: url("{background_image_url}"); back
 
 # Create the parameter input and Generate button
 with st.container():
-    st.image(Image.open("https://example.com/white_square.png"), use_column_width=True)
+    st.image(Image.open("https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"), use_column_width=True)
     pixel_size = st.slider("Pixel size", 1, 100, 10, 1)
     if st.button("Generate"):
         with st.spinner("Generating pixelated banana..."):
