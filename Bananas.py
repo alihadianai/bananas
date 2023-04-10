@@ -25,7 +25,10 @@ if st.button("Generate"):
     st.success("Done!")
     st.write(response)
     # Download the image and display it
-    image_url = "https://imgtr.ee/images/2023/04/10/nQda2.png"
+    image_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
     response = requests.get(image_url)
-    img = Image.open(BytesIO(response.content))
-    st.image(img, use_column_width=True)
+    try:
+        img = Image.open(BytesIO(response.content))
+        st.image(img, use_column_width=True)
+    except:
+        st.warning("Unable to display image.")
