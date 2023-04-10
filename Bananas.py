@@ -1,53 +1,56 @@
-# Import the necessary libraries
 import streamlit as st
-import requests
-from PIL import Image, ImageDraw, ImageFont
-from io import BytesIO
 import random
-import time
+
+# Define the banana text art dataset
+banana_text_art = [
+    """
+         _____
+     .-'`     `'-.
+    /  _      _   \\
+   /   /      \   \\
+  |   /        \   |
+  |  |          |  |
+  |  |          |  |
+  |  |          |  |
+   \  \        /  /
+    \   `.__.'   /
+     `-._____.-'`,
+""",
+    """
+    ,-.      _,---._ __  / \
+   /  )    ,'       `./ /   \
+  (  (   ,\"`--.      / /     \\
+   \  `-'      `,_  / /       \\
+    `._           ` \"\\        :
+       `\".          `.\\       |
+        /      \"--._   \\       |
+       /             `  \\      :
+      /`._            |  |      \
+     /               ||   \      \
+    /                ||    \      \
+  ,'                 ''     .     \
+(_,-..__..._         .-\"`-._ `\"-._/ 
+           `\"\"---~~`        `~~\"\"` 
+""",
+    """
+   /\_/\
+  ( o o )
+ ( =^= ) 
+  (\"_\"_) 
+""",
+    """
+  .-^-.
+ /_/_\_\
+' ' | ` `
+    J
+   / \
+  /   \
+""",
+]
 
 # Define the function to generate the banana text art
-def generate_banana_text(prompt):
-    # Define the URL of the banana text art website
-    url = f"https://textart.sh/topic/{prompt}"
-    response = requests.get(url)
-    # Check if the website returns a valid response
-    if response.status_code != 200:
-        return None
-    # Parse the text art from the HTML response
-    html = response.content.decode("utf-8")
-    start_tag = "<div class=\"post_text\" itemprop=\"text\">"
-    end_tag = "</div>"
-    start_index = html.find(start_tag)
-    end_index = html.find(end_tag, start_index)
-    if start_index == -1 or end_index == -1:
-        return None
-    text_art = html[start_index + len(start_tag) : end_index]
-    return text_art
-
-# Define the function to generate the response
-def generate_response(prompt):
-    # Generate a random banana text art
-    text_art = generate_banana_text(prompt)
-    # If the text art is None, return an error message
-    if text_art is None:
-        return "Sorry, we could not generate a banana text art for that prompt."
-    # Define the font and size for the text art
-    font_path = "fonts/PressStart2P-Regular.ttf"
-    font_size = 12
-    font = ImageFont.truetype(font_path, font_size)
-    # Define the width and height for the image
-    width, height = font.getsize(text_art)
-    width += 10
-    height += 10
-    # Create the image and draw the text art on it
-    img = Image.new("RGB", (width, height), color="#151515")
-    draw = ImageDraw.Draw(img)
-    draw.text((5, 5), text_art, font=font, fill=(255, 191, 0))
-    # Convert the image to bytes and return it
-    img_bytes = BytesIO()
-    img.save(img_bytes, format="PNG")
-    return img_bytes.getvalue()
+def generate_banana_text_art():
+    return random.choice(banana_text_art)
 
 # Set up the Streamlit app
 st.set_page_config(page_title="Banana Text Art Generator", page_icon="🍌", layout="wide")
@@ -58,7 +61,6 @@ page_bg_img = '''
 body {
 background-color: #151515;
 color: white;
-font-family: "Press Start 2P", cursive;
 }
 .stButton button {
 background-color: #ffbf00;
@@ -86,11 +88,17 @@ background-color: #333333;
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
 # Set up the navigation bar
-navigation = st.sidebar.radio("Navigation", ["Generator", "Information", "Code Resources", "About Us"])
+navigation = st.sidebar.radio("Navigation", ["Generate Banana Text Art", "About Us"])
 
-# Create the generator page
-if navigation == "Generator":
+# Create the generate banana text art page
+if navigation == "Generate Banana Text Art":
     st.title("Banana Text Art Generator")
-    st.write("Enter a prompt and we'll generate a random banana text art!")
-    # Create the text input and Generate button
-    prompt = st.text_input("Prompt:")
+    st.write("Click the button below to generate a random banana text art!")
+    if st.button("Generate"):
+        banana_text_art = generate_banana_text_art()
+        st.code(banana_text_art)
+
+# Create the about us page
+else:
+    st.title("About Us")
+    st.write("We are a team of banana enthusiasts who love creating text art!")
