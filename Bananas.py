@@ -1,37 +1,34 @@
 import streamlit as st
-from PIL import Image
 import requests
+from PIL import Image
 from io import BytesIO
+import time
 
-# Set page configuration
-st.set_page_config(
-    page_title="Banana Generator",
-    page_icon=":banana:",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+# Define the function to generate the response
+def generate_response(prompt):
+    # Insert your code here to generate the response
+    # You can use any language model or API you prefer
+    time.sleep(5) # Simulate the response generation process
+    response = f"Your prompt: {prompt}\n\nThis is a dummy response."
+    return response
 
-# Load background image
-bg_image = Image.open("https://i.imgur.com/KiTSzRD.png")
-page_bg = st.image(bg_image, use_column_width=True)
+# Set up the Streamlit app
+st.set_page_config(page_title="Banana Chatbot", page_icon="🍌", layout="wide")
+st.title("Banana Chatbot")
+st.write("Enter a prompt and the chatbot will respond!")
 
-# Set sidebar
-st.sidebar.header("Parameters")
-prompt = st.sidebar.text_input("Enter prompt:", "A pixelated banana")
-generate = st.sidebar.button("Generate")
-
-# Set main page
-st.title("Banana Generator")
-st.markdown("---")
-
-if generate:
-    # Generate banana image
-    banana_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
-    response = requests.get(banana_url)
-    img = Image.open(BytesIO(response.content))
-    img = img.resize((200, 200))
-    st.image(img, caption="Pixelated banana", use_column_width=True)
-
-# Add footer
-st.markdown("---")
-st.write("Built with Streamlit")
+# Create the text input and Generate button
+prompt = st.text_input("Prompt:")
+if st.button("Generate"):
+    with st.spinner("Generating response..."):
+        response = generate_response(prompt)
+    st.success("Done!")
+    st.write(response)
+    # Download the image and display it
+    image_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
+    response = requests.get(image_url)
+    try:
+        img = Image.open(BytesIO(response.content))
+        st.image(img, use_column_width=True)
+    except:
+        st.warning("Unable to display image.")
