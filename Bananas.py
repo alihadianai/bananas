@@ -73,11 +73,6 @@ if navigation == "Image Generator":
             except:
                 st.warning("Unable to display image.")
 
-# Create the information page
-elif navigation == "Information":
-    st.title("Banana Information")
-    st.write("Bananas are a great source of potassium and other nutrients.")
-
 # Create the code resources page
 elif navigation == "Code Resources":
     st.title("Banana Code Resources")
