@@ -53,7 +53,7 @@ background-color: #333333;
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
 # Set up the navigation bar
-navigation = st.sidebar.radio("Navigation", ["Image Generator", "Code Resources And Information", "About Us"])
+navigation = st.sidebar.radio("Navigation", ["Image Generator", "Information", "Code Resources", "About Us"])
 
 # Create the image generator page
 if navigation == "Image Generator":
@@ -72,6 +72,11 @@ if navigation == "Image Generator":
                 st.image(img, use_column_width=True)
             except:
                 st.warning("Unable to display image.")
+
+# Create the information page
+elif navigation == "Information":
+    st.title("Banana Information")
+    st.write("Bananas are a great source of potassium and other nutrients.")
 
 # Create the code resources page
 elif navigation == "Code Resources":
