@@ -14,39 +14,35 @@ def generate_response(prompt):
 
 # Set up the Streamlit app
 st.set_page_config(page_title="Banana Chatbot", page_icon="🍌", layout="wide")
-st.markdown("""
+
+# Set up the background image
+page_bg_img = '''
 <style>
 body {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect fill='%23fc0' width='50' height='50'/%3E%3Crect fill='%23fc0' x='50' y='50' width='50' height='50'/%3E%3Crect fill='%23f80' x='50' width='50' height='50'/%3E%3Crect fill='%23f80' y='50' width='50' height='50'/%3E%3C/svg%3E");
+background-image: url("https://i.imgur.com/Lf0vOM4.png");
+background-size: cover;
 }
 </style>
-""", unsafe_allow_html=True)
+'''
+st.markdown(page_bg_img, unsafe_allow_html=True)
 
-PAGES = {
-    "Home": st.markdown("# Home\n\nWelcome to the Banana Chatbot!"),
-    "Chat": st.markdown("# Chat\n\nEnter a prompt and the chatbot will respond!"),
-    "About": st.markdown("# About\n\nThis app was created by John Doe.")
-}
+# Set up the header
+st.write("<h1 style='text-align: center; color: red; font-family: Courier;'>Banana Chatbot</h1>", unsafe_allow_html=True)
 
 # Create the text input and Generate button
-page = st.sidebar.selectbox("Select a page", ["Home", "Chat", "About"])
+prompt = st.text_input("Prompt:", key="prompt")
+if st.button("Generate"):
+    with st.spinner("Generating response..."):
+        response = generate_response(prompt)
+    st.success("Done!")
+    st.write("<p style='color: blue; font-family: American Typewriter;'>Response:</p>", unsafe_allow_html=True)
+    st.write(f"<p style='font-family: American Typewriter;'>{response}</p>", unsafe_allow_html=True)
 
-if page == "Home":
-    st.sidebar.markdown("This is the home page")
-elif page == "Chat":
-    prompt = st.text_input("Prompt:")
-    if st.button("Generate"):
-        with st.spinner("Generating response..."):
-            response = generate_response(prompt)
-        st.success("Done!")
-        st.write(response)
-        # Download the image and display it
-        image_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
-        response = requests.get(image_url)
-        try:
-            img = Image.open(BytesIO(response.content))
-            st.image(img, use_column_width=True)
-        except:
-            st.warning("Unable to display image.")
-else:
-    st.sidebar.markdown("This is the about page")
+    # Download the image and display it
+    image_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
+    response = requests.get(image_url)
+    try:
+        img = Image.open(BytesIO(response.content))
+        st.image(img, use_column_width=True)
+    except:
+        st.warning("Unable to display image.")
