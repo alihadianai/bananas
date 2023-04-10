@@ -33,7 +33,7 @@ st.title("Banana AI Image Generator")
 st.write("Please generate an image using Stable Diffusion!")
 
 # Create the text input and Generate button
-default_prompt = "Please generate a sci-fi animation with Spielberg director style."
+default_prompt = "Please write your prompt here."
 prompt = st.text_input("Prompt:", default_prompt)
 if st.button("Generate"):
     with st.spinner("Generating response..."):
