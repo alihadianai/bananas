@@ -113,7 +113,8 @@ if navigation == "Image Generator":
         with st.spinner("Generating image..."):
             # Insert your code here to generate the image
             time.sleep(5) # Simulate the image generation process
-            response = random.choice(banana_text_art)
+            image_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
+            response = requests.get(image_url)
             try:
                 img = Image.open(BytesIO(response.content))
                 st.image(img, use_column_width=True)
