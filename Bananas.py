@@ -10,7 +10,7 @@ def generate_pixelated_banana(pixel_size):
     # Insert your code here to generate the pixelated banana
     # You can use any image processing library you prefer
     time.sleep(5) # Simulate the image generation process
-    banana_image_url = "https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg"
+    banana_image_url = "https://example.com/banana.jpg"
     return banana_image_url
 
 # Set up the Streamlit app
@@ -25,4 +25,4 @@ with st.container():
         with st.spinner("Generating pixelated banana..."):
             banana_image_url = generate_pixelated_banana(pixel_size)
         st.success("Done!")
-        st.image(banana_image_url, use_column_width=True)
+        st.image(Image.open("https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg"), use_column_width=True)
