@@ -9,84 +9,38 @@ def generate_response(prompt):
     # Insert your code here to generate the response
     # You can use any language model or API you prefer
     time.sleep(5) # Simulate the response generation process
-    response = f"Your prompt: {prompt}\n\nThis is a dummy response."
+    response = f"{prompt}\n\nこれはダミーの返答です。"
     return response
 
 # Set up the Streamlit app
-st.set_page_config(page_title="Banana Chatbot", page_icon="🍌")
-st.markdown(
-"""
-<style>
-body {
-    background-image: url('https://i.imgur.com/sJtNWjK.png');
-    background-repeat: repeat;
-}
-.sidebar-content {
-    background-image: url('https://i.imgur.com/Wq3fVUU.png');
-    background-repeat: repeat;
-}
-.css-2trqyj, .st-bw, .st-cv, .st-d6, .st-df, .st-dg, .st-hv, .st-it, .st-jh, .st-ki, .st-lf, .st-ly, .st-m1, .st-ni, .st-nt, .st-o3, .st-q7, .st-qw, .st-sf, .st-tq, .st-u9, .st-vh, .st-wy {
-    background-color: #FFFFFF;
-    border-radius: 25px;
-}
-.css-hby737, .css-1vdfo4t {
-    border-radius: 25px;
-}
-.st-dz {
-    padding: 1rem;
-}
-.st-cu {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 18px;
-    line-height: 24px;
-}
-.st-cx {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 24px;
-    line-height: 32px;
-}
-.st-cs {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 16px;
-    line-height: 20px;
-}
-.st-cp {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 14px;
-    line-height: 18px;
-}
-.st-cz {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 20px;
-    line-height: 24px;
-}
-.st-dd {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 12px;
-    line-height: 16px;
-}
-.st-cl {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 28px;
-    line-height: 36px;
-}
-.st-ce {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 22px;
-    line-height: 28px;
-}
-.st-ck {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 32px;
-    line-height: 40px;
-}
-.st-ct {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 26px;
-    line-height: 32px;
-}
-.st-cv > .st-cw {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-}
-.css
+st.set_page_config(page_title="バナナチャットボット", page_icon="🍌", layout="wide")
+st.title("バナナチャットボット")
+st.write("プロンプトを入力して、チャットボットが応答します！")
+
+# Set up the background image
+bg_img = Image.open('bananas_bg.jpg')
+st.set_page_config(page_title="Banana Chatbot", page_icon="🍌", layout="wide",
+                    page_bg_image=bg_img)
+
+# Create the text input and Generate button
+prompt = st.text_input("プロンプト:")
+if st.button("生成する"):
+    with st.spinner("応答を生成しています..."):
+        response = generate_response(prompt)
+    st.success("完了！")
+    st.write(response)
+    # Download the image and display it
+    image_url = "https://imgtr.ee/images/2023/04/10/nQda2.png"
+    response = requests.get(image_url)
+    try:
+        img = Image.open(BytesIO(response.content))
+        st.image(img, use_column_width=True)
+    except:
+        st.warning("画像を表示できません。")
+
+# Set up the language selector
+language = st.selectbox("Select language / 言語を選択", ["English", "日本語"])
+if language == "English":
+    st.write("This is the English version.")
+else:
+    st.write("これは日本語版です。")
