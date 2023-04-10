@@ -14,36 +14,16 @@ def generate_response(prompt):
 
 # Set up the Streamlit app
 st.set_page_config(page_title="Banana Chatbot", page_icon="🍌", layout="wide")
+st.title("Banana Chatbot")
 
-# Define the pages
-pages = ["Home", "Chat", "About"]
-
-# Define the contents of each page
-home_content = """
-## Welcome to Banana Chatbot!
-
-This app allows you to chat with a banana and get some fun responses.
-"""
-
-chat_content = """
-## Banana Chat
-
-Enter a prompt and the chatbot will respond!
-"""
-
-about_content = """
-## About Banana Chatbot
-
-This app was created by John Doe as a fun project to showcase Streamlit.
-"""
-
-# Add a navigation menu to switch between pages
-selection = st.sidebar.radio("Go to", pages)
-
-# Display the content based on the user's selection
-if selection == "Home":
-    st.write(home_content)
-elif selection == "Chat":
+# Define the function to show the Home page
+def show_home():
+    st.write("Welcome to the Banana Chatbot!")
+    st.write("This app generates responses to your prompts using a language model.")
+    st.write("Click on the Chat button to start chatting!")
+    
+# Define the function to show the Chat page
+def show_chat():
     # Create the text input and Generate button
     prompt = st.text_input("Prompt:")
     if st.button("Generate"):
@@ -59,5 +39,19 @@ elif selection == "Chat":
             st.image(img, use_column_width=True)
         except:
             st.warning("Unable to display image.")
-elif selection == "About":
-    st.write(about_content)
+    
+# Define the function to show the About page
+def show_about():
+    st.write("This app was created by [Your Name Here].")
+    st.write("It uses Streamlit and a language model to generate responses to your prompts.")
+
+# Create the navigation buttons
+nav = st.sidebar.radio("Select a page:", ["Home", "Chat", "About"])
+
+# Show the appropriate page based on the user's selection
+if nav == "Home":
+    show_home()
+elif nav == "Chat":
+    show_chat()
+elif nav == "About":
+    show_about()
