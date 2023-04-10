@@ -15,37 +15,40 @@ def generate_response(prompt):
 # Set up the Streamlit app
 st.set_page_config(page_title="Banana Chatbot", page_icon="🍌", layout="wide")
 
-# Add background image
-st.markdown(
-    """
-    <style>
-    .reportview-container {
-        background: url("https://i.imgur.com/KxKr5w5.png")
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+# Add a background image
+background_image = Image.open("bananas_bg.png")
+st.image(background_image, use_column_width=True)
 
-# Add title and description
-st.title("Welcome to Banana Chatbot!")
-st.write("""
-    Do you want to have some fun with an AI chatbot? You're in the right place! Just enter your prompt and let the chatbot generate a response.
-""")
+# Create the navigation menu
+menu = ["Home", "Chat", "About"]
+choice = st.sidebar.selectbox("Select a page", menu)
 
-# Create the text input and Generate button
-prompt = st.text_input("Prompt:")
-if st.button("Generate"):
-    with st.spinner("Generating response..."):
-        response = generate_response(prompt)
-    st.success("Done!")
-    st.write(response)
+# Display the appropriate page
+if choice == "Home":
+    st.title("Welcome to the Banana Chatbot!")
+    st.write("This chatbot is designed to generate responses based on your prompts. Simply enter a prompt and click the 'Generate' button to get started!")
+    
+elif choice == "Chat":
+    st.title("Banana Chatbot")
+    st.write("Enter a prompt and the chatbot will respond!")
+    # Create the text input and Generate button
+    prompt = st.text_input("Prompt:")
+    if st.button("Generate"):
+        with st.spinner("Generating response..."):
+            response = generate_response(prompt)
+        st.success("Done!")
+        st.write(response)
+        # Download the image and display it
+        image_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
+        response = requests.get(image_url)
+        try:
+            img = Image.open(BytesIO(response.content))
+            st.image(img, use_column_width=True)
+        except:
+            st.warning("Unable to display image.")
+            
+elif choice == "About":
+    st.title("About the Banana Chatbot")
+    st.write("The Banana Chatbot is a simple web application designed to showcase how to build a chatbot using Streamlit. It was built by John Doe as a fun project and is not intended for production use.")
+    st.write("If you have any questions or feedback, feel free to contact John at john.doe@example.com.")
 
-    # Download the image and display it
-    image_url = "https://thumb.ac-illust.com/a8/a8ccf142b92269fcccc3e8f92b5bba0e_t.jpeg"
-    response = requests.get(image_url)
-    try:
-        img = Image.open(BytesIO(response.content))
-        st.image(img, use_column_width=True)
-    except:
-        st.warning("Unable to display image.")
