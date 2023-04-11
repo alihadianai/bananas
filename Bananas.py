@@ -50,30 +50,3 @@ with tab2:
     st.write('Even I love it 🤤')
   if disagree:
     st.write('You are boring 😒')
-Here’s the code breakdown:
-
-Libraries
-pandas — for writing a dataframe
-
-numpy — to generate random numbers
-
-Containers
-st.expander — to add an “About” section
-
-st.sidebar — for passing Streamlit elements by using with notation
-
-st.tabs — separated tabs to pass Streamlit elements by using with notation
-
-Widgets
-st.button and st.balloons — a button for throwing balloons 🎈
-
-st.text_input — a single-line text input
-
-st.checkbox — to select multiple options
-
-Data Display Elements
-st.dataframe — displays pandas dataframe as a data table
-
-st.bar_chart— displays a beautiful bar chart
-
-st.image — displays an image
