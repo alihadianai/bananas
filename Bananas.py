@@ -1,39 +1,62 @@
-import streamlit as st
-import pandas as pd
+pip install Flask
+pip install SQLAlchemy
 
-# Set up your data
-team_df = pd.DataFrame({
-    'Name': ['آلیس', 'باب', 'چارلی', 'دیوید'],
-    'Role': ['مدیر', 'توسعه‌دهنده', 'توسعه‌دهنده', 'طراح']
-})
-project_df = pd.DataFrame({
-    'Project Name': ['پروژه ۱', 'پروژه ۲', 'پروژه ۳'],
-    'Assigned To': ['آلیس', 'باب', 'چارلی']
-})
+from flask import Flask, render_template, request, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
 
-# Define your Streamlit app
-st.title('ابزار مدیریت پروژه')
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-st.header('اعضای تیم')
-st.dataframe(team_df)
+db = SQLAlchemy(app)
 
-st.header('پروژه‌ها')
-st.dataframe(project_df)
+# دیتا مدل ها
 
-# Add functionality for adding new team members
-st.header('افزودن عضو جدید به تیم')
-new_name = st.text_input('نام')
-new_role = st.selectbox('نقش', ['مدیر', 'توسعه‌دهنده', 'طراح'])
-if st.button('افزودن'):
-    team_df = team_df.append({'Name': new_name, 'Role': new_role}, ignore_index=True)
-    st.success('عضو تیم جدید اضافه شد!')
-    st.dataframe(team_df)
+class Company(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(50), nullable=False)
+    password = db.Column(db.String(50), nullable=False)
 
-# Add functionality for adding new projects
-st.header('افزودن پروژه جدید')
-new_project_name = st.text_input('نام پروژه')
-new_assigned_to = st.selectbox('اختصاص داده شده به', team_df['Name'].tolist())
-if st.button('افزودن'):
-    project_df = project_df.append({'Project Name': new_project_name, 'Assigned To': new_assigned_to}, ignore_index=True)
-    st.success('پروژه جدید اضافه شد!')
-    st.dataframe(project_df)
+    def __repr__(self):
+        return '<Company %r>' % self.name
+
+class Customer(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    phone = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(50), nullable=False)
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
+
+    def __repr__(self):
+        return '<Customer %r>' % self.name
+
+# روت ها
+
+@app.route('/')
+def home():
+    return render_template('home.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        company = Company.query.filter_by(email=email, password=password).first()
+        if company:
+            return redirect(url_for('dashboard', company_id=company.id))
+        else:
+            return render_template('login.html', error='Invalid email or password')
+    else:
+        return render_template('login.html')
+
+@app.route('/dashboard/<int:company_id>')
+def dashboard(company_id):
+    company = Company.query.get(company_id)
+    customers = Customer.query.filter_by(company_id=company_id).all()
+    return render_template('dashboard.html', company=company, customers=customers)
+
+# بدنه وب اپلیکیشن
+
+if __name__ == '__main__':
+    app.run(debug=True)
