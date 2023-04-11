@@ -1,102 +1,74 @@
 import streamlit as st
 import pandas as pd
-from datetime import datetime
-from typing import List, Dict, Any
 
-class ProjectManager:
-
-    def __init__(self, db):
-        self.db = db
+class ProjectManagementApp:
+    def __init__(self):
         self.users = {'user1': 'password1', 'user2': 'password2'}
-    
+        self.pages = ['Home', 'Tasks', 'Projects']
+        self.current_user = None
+        self.current_page = None
+        self.tasks_df = pd.DataFrame(columns=['Task name', 'Task description', 'Due date'])
+        self.projects_df = pd.DataFrame(columns=['Project name', 'Project description', 'Status'])
+
     def authenticate(self, username, password):
         if username in self.users and password == self.users[username]:
+            self.current_user = username
             return True
         return False
-    
-    def add_task(self, task_name, task_description, task_due_date):
-        if not all([task_name, task_description, task_due_date]):
-            st.error('Please fill in all fields.')
-            return
-        try:
-            task_due_date = datetime.strptime(task_due_date, '%Y-%m-%d').date()
-        except ValueError:
-            st.error('Please enter a valid date format (YYYY-MM-DD).')
-            return
-        task_data = {'Task name': task_name,
-                     'Task description': task_description,
-                     'Due date': task_due_date}
-        self.db.add_task(task_data)
-        st.success('Task added.')
-    
-    def add_project(self, project_name, project_description, project_status):
-        if not all([project_name, project_description]):
-            st.error('Please fill in all fields.')
-            return
-        project_data = {'Project name': project_name,
-                        'Project description': project_description,
-                        'Status': project_status}
-        self.db.add_project(project_data)
-        st.success('Project added.')
-    
-    def view_tasks(self):
-        tasks = self.db.get_tasks()
-        if not tasks:
-            st.warning('No tasks found.')
-            return
-        st.write(pd.DataFrame(tasks))
-    
-    def view_projects(self):
-        projects = self.db.get_projects()
-        if not projects:
-            st.warning('No projects found.')
-            return
-        st.write(pd.DataFrame(projects))
 
-class Database:
-
-    def __init__(self):
-        self.tasks = []
-        self.projects = []
-    
-    def add_task(self, task_data: Dict[str, Any]):
-        self.tasks.append(task_data)
-    
-    def add_project(self, project_data: Dict[str, Any]):
-        self.projects.append(project_data)
-    
-    def get_tasks(self) -> List[Dict[str, Any]]:
-        return self.tasks
-    
-    def get_projects(self) -> List[Dict[str, Any]]:
-        return self.projects
-
-def main():
-    db = Database()
-    project_manager = ProjectManager(db)
-    page = st.sidebar.selectbox('Select a page', ['Home', 'Tasks', 'Projects'])
-    
-    if page == 'Home':
+    def render_login_page(self):
         st.title('Welcome to the project management app!')
+        username = st.text_input('Username')
+        password = st.text_input('Password', type='password')
         if st.button('Log in'):
-            username = st.text_input('Username')
-            password = st.text_input('Password', type='password')
-            if project_manager.authenticate(username, password):
+            if self.authenticate(username, password):
                 st.success('Logged in as {}'.format(username))
-                st.stop()
+                self.current_page = 'Home'
             else:
                 st.error('Incorrect username or password')
-    
-    elif page == 'Tasks':
+
+    def render_tasks_page(self):
         st.title('Task management')
         task_name = st.text_input('Task name')
         task_description = st.text_area('Task description')
         task_due_date = st.date_input('Due date')
-task_assigned_to = st.text_input('Assigned to')
-if st.button('Add task'):
-tasks_df = pd.DataFrame({'Task name': [task_name],
-'Task description': [task_description],
-'Due date': [task_due_date],
-'Assigned to': [task_assigned_to]})
-st.write('Task added:')
-st.write(tasks_df)
+        if st.button('Add task'):
+            try:
+                self.tasks_df.loc[len(self.tasks_df)] = [task_name, task_description, task_due_date]
+                st.write('Task added:')
+                st.write(self.tasks_df)
+            except:
+                st.error('Error adding task')
+
+    def render_projects_page(self):
+        st.title('Project tracking')
+        project_name = st.text_input('Project name')
+        project_description = st.text_area('Project description')
+        project_status = st.selectbox('Status', ['Not started', 'In progress', 'Completed'])
+        if st.button('Create project'):
+            try:
+                self.projects_df.loc[len(self.projects_df)] = [project_name, project_description, project_status]
+                st.write('Project created:')
+                st.write(self.projects_df)
+            except:
+                st.error('Error creating project')
+
+    def run(self):
+        st.sidebar.title('Navigation')
+        self.current_page = st.sidebar.selectbox('Select a page', self.pages)
+
+        if self.current_user is None:
+            self.render_login_page()
+
+        elif self.current_page == 'Home':
+            st.title('Welcome to the home page, {}'.format(self.current_user))
+
+        elif self.current_page == 'Tasks':
+            self.render_tasks_page()
+
+        elif self.current_page == 'Projects':
+            self.render_projects_page()
+
+if __name__ == '__main__':
+    app = ProjectManagementApp()
+    app.run()
