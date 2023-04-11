@@ -1,9 +1,3 @@
-
-streamlit==1.12.2
-pandas==1.4.4
-numpy==1.23.2
-
-
 import pandas as pd
 import numpy as np
 
