@@ -1,17 +1,15 @@
 import streamlit as st
-import pandas as pd
+from db import Database
 
 class ProjectManagementApp:
     def __init__(self):
-        self.users = {'user1': 'password1', 'user2': 'password2'}
+        self.db = Database()
         self.pages = ['Home', 'Tasks', 'Projects']
         self.current_user = None
         self.current_page = None
-        self.tasks_df = pd.DataFrame(columns=['Task name', 'Task description', 'Due date'])
-        self.projects_df = pd.DataFrame(columns=['Project name', 'Project description', 'Status'])
 
     def authenticate(self, username, password):
-        if username in self.users and password == self.users[username]:
+        if self.db.authenticate_user(username, password):
             self.current_user = username
             return True
         return False
@@ -34,11 +32,10 @@ class ProjectManagementApp:
         task_due_date = st.date_input('Due date')
         if st.button('Add task'):
             try:
-                self.tasks_df.loc[len(self.tasks_df)] = [task_name, task_description, task_due_date]
-                st.write('Task added:')
-                st.write(self.tasks_df)
-            except:
-                st.error('Error adding task')
+                self.db.add_task(self.current_user, task_name, task_description, task_due_date)
+                st.write('Task added')
+            except ValueError as e:
+                st.error(str(e))
 
     def render_projects_page(self):
         st.title('Project tracking')
@@ -47,11 +44,10 @@ class ProjectManagementApp:
         project_status = st.selectbox('Status', ['Not started', 'In progress', 'Completed'])
         if st.button('Create project'):
             try:
-                self.projects_df.loc[len(self.projects_df)] = [project_name, project_description, project_status]
-                st.write('Project created:')
-                st.write(self.projects_df)
-            except:
-                st.error('Error creating project')
+                self.db.add_project(self.current_user, project_name, project_description, project_status)
+                st.write('Project created')
+            except ValueError as e:
+                st.error(str(e))
 
     def run(self):
         st.sidebar.title('Navigation')
