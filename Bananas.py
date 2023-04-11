@@ -1,52 +1,81 @@
-import pandas as pd
-import numpy as np
+import psycopg2
 
-# Expander section
-with st.expander("About"):
-  st.write("""Trying to add a data table, chart, sidebar button with 
-          ballons, an image, text input & exploring tabs!""")
+conn = psycopg2.connect(database="your_database_name", user="your_username", password="your_password", host="your_host", port="your_port")
 
-# Sidebar section
-with st.sidebar:
-  st.subheader('This is a Sidebar')
-  st.write('Button with Balloons 🎈')
-  if st.button('Click me!✨'):
-    st.balloons()
-  else:
-    st.write(' ')
+cur = conn.cursor()
 
-# Dataframe and Chart display section
-st.subheader('Interactive Data Table')
-df = pd.DataFrame(
-    np.random.randn(50, 3),  # generates random numeric values!
-    columns=["a", "b", "c"])
-st.dataframe(df) 
+cur.execute('''CREATE TABLE Users (ID SERIAL PRIMARY KEY, Username TEXT, Email TEXT, Password TEXT)''')
 
-st.subheader('Bar Chart 📊')
-st.bar_chart(df)
+cur.execute('''CREATE TABLE Projects (ID SERIAL PRIMARY KEY, Name TEXT, Description TEXT, Start_Date TEXT, End_Date TEXT)''')
 
-# Image upload and text input section
-st.subheader('An Image')
-st.image('https://www.scoopbyte.com/wp-content/uploads/2019/12/tom-and-jerry.jpg')
+cur.execute('''CREATE TABLE Tasks (ID SERIAL PRIMARY KEY, Name TEXT, Description TEXT, Due_Date TEXT, Status TEXT, Project_ID INTEGER)''')
 
-st.subheader('Text Input')
-greet = st.text_input('Write your name, please!')
-st.write('👋 Hey!', greet)
+conn.commit()
 
+conn.close()
 
-# Tabs section
-st.subheader('Tabs')
-tab1, tab2 = st.tabs(["TAB 1", "TAB 2"])
+import streamlit as st
+import psycopg2
 
-with tab1:
-  st.write('WOW!')
-  st.image("https://i.gifer.com/DJR3.gif", width=400)
+# Connect to the database
+conn = psycopg2.connect(database="your_database_name", user="your_username", password="your_password", host="your_host", port="your_port")
 
-with tab2:
-  st.write('Do you like ice cream? 🍨')
-  agree = st.checkbox('Yes! I love it')
-  disagree = st.checkbox("Nah! 😅")
-  if agree:
-    st.write('Even I love it 🤤')
-  if disagree:
-    st.write('You are boring 😒')
+# Create a cursor
+cur = conn.cursor()
+
+# Create the sign-up page
+def signup():
+    st.title("Sign Up")
+    username = st.text_input("Username")
+    email = st.text_input("Email")
+    password = st.text_input("Password", type="password")
+    if st.button("Sign Up"):
+        # Check if the username already exists
+        cur.execute("SELECT * FROM Users WHERE Username = %s", (username,))
+        result = cur.fetchone()
+        if result:
+            st.error("Username already exists")
+        else:
+            # Insert the new user into the database
+            cur.execute("INSERT INTO Users (Username, Email, Password) VALUES (%s, %s, %s)", (username, email, password))
+            conn.commit()
+            st.success("You have successfully signed up")
+
+# Create the login page
+def login():
+    st.title("Log In")
+    username = st.text_input("Username")
+    password = st.text_input("Password", type="password")
+    if st.button("Log In"):
+        # Check if the username and password are correct
+        cur.execute("SELECT * FROM Users WHERE Username = %s AND Password = %s", (username, password))
+        result = cur.fetchone()
+        if result:
+            st.success("You have successfully logged in")
+        else:
+            st.error("Invalid username or password")
+
+# Create the home page
+def home():
+    st.title("Home")
+
+    # Create a new project
+    if st.button("Create Project"):
+        name = st.text_input("Project Name")
+        description = st.text_input("Project Description")
+        start_date = st.date_input("Start Date")
+        end_date = st.date_input("End Date")
+        cur.execute("INSERT INTO Projects (Name, Description, Start_Date, End_Date) VALUES (%s, %s, %s, %s)", (name, description, start_date, end_date))
+        conn.commit()
+        st.success("Project created successfully")
+
+    # List all projects
+    cur.execute("SELECT * FROM Projects")
+    projects = cur.fetchall()
+    for project in projects:
+        st.write(project)
+
+# Create the app
+def app():
+    st.set_page_config(page_title="Project Management App", page_icon=":clipboard:")
+    st
