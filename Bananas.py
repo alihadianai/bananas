@@ -1,15 +1,79 @@
 import streamlit as st
 import pandas as pd
+from datetime import datetime
+from typing import List, Dict, Any
 
-# Set up user authentication
-users = {'user1': 'password1', 'user2': 'password2'}
-def authenticate(username, password):
-    if username in users and password == users[username]:
-        return True
-    return False
+class ProjectManager:
 
-# Define the pages of the app
+    def __init__(self, db):
+        self.db = db
+        self.users = {'user1': 'password1', 'user2': 'password2'}
+    
+    def authenticate(self, username, password):
+        if username in self.users and password == self.users[username]:
+            return True
+        return False
+    
+    def add_task(self, task_name, task_description, task_due_date):
+        if not all([task_name, task_description, task_due_date]):
+            st.error('Please fill in all fields.')
+            return
+        try:
+            task_due_date = datetime.strptime(task_due_date, '%Y-%m-%d').date()
+        except ValueError:
+            st.error('Please enter a valid date format (YYYY-MM-DD).')
+            return
+        task_data = {'Task name': task_name,
+                     'Task description': task_description,
+                     'Due date': task_due_date}
+        self.db.add_task(task_data)
+        st.success('Task added.')
+    
+    def add_project(self, project_name, project_description, project_status):
+        if not all([project_name, project_description]):
+            st.error('Please fill in all fields.')
+            return
+        project_data = {'Project name': project_name,
+                        'Project description': project_description,
+                        'Status': project_status}
+        self.db.add_project(project_data)
+        st.success('Project added.')
+    
+    def view_tasks(self):
+        tasks = self.db.get_tasks()
+        if not tasks:
+            st.warning('No tasks found.')
+            return
+        st.write(pd.DataFrame(tasks))
+    
+    def view_projects(self):
+        projects = self.db.get_projects()
+        if not projects:
+            st.warning('No projects found.')
+            return
+        st.write(pd.DataFrame(projects))
+
+class Database:
+
+    def __init__(self):
+        self.tasks = []
+        self.projects = []
+    
+    def add_task(self, task_data: Dict[str, Any]):
+        self.tasks.append(task_data)
+    
+    def add_project(self, project_data: Dict[str, Any]):
+        self.projects.append(project_data)
+    
+    def get_tasks(self) -> List[Dict[str, Any]]:
+        return self.tasks
+    
+    def get_projects(self) -> List[Dict[str, Any]]:
+        return self.projects
+
 def main():
+    db = Database()
+    project_manager = ProjectManager(db)
     page = st.sidebar.selectbox('Select a page', ['Home', 'Tasks', 'Projects'])
     
     if page == 'Home':
@@ -17,7 +81,7 @@ def main():
         if st.button('Log in'):
             username = st.text_input('Username')
             password = st.text_input('Password', type='password')
-            if authenticate(username, password):
+            if project_manager.authenticate(username, password):
                 st.success('Logged in as {}'.format(username))
                 st.stop()
             else:
@@ -28,24 +92,11 @@ def main():
         task_name = st.text_input('Task name')
         task_description = st.text_area('Task description')
         task_due_date = st.date_input('Due date')
-        if st.button('Add task'):
-            tasks_df = pd.DataFrame({'Task name': [task_name],
-                                     'Task description': [task_description],
-                                     'Due date': [task_due_date]})
-            st.write('Task added:')
-            st.write(tasks_df)
-    
-    elif page == 'Projects':
-        st.title('Project tracking')
-        project_name = st.text_input('Project name')
-        project_description = st.text_area('Project description')
-        project_status = st.selectbox('Status', ['Not started', 'In progress', 'Completed'])
-        if st.button('Create project'):
-            projects_df = pd.DataFrame({'Project name': [project_name],
-                                        'Project description': [project_description],
-                                        'Status': [project_status]})
-            st.write('Project created:')
-            st.write(projects_df)
-
-if __name__ == '__main__':
-    main()
+task_assigned_to = st.text_input('Assigned to')
+if st.button('Add task'):
+tasks_df = pd.DataFrame({'Task name': [task_name],
+'Task description': [task_description],
+'Due date': [task_due_date],
+'Assigned to': [task_assigned_to]})
+st.write('Task added:')
+st.write(tasks_df)
