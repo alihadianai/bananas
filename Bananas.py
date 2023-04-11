@@ -1,19 +1,3 @@
-import psycopg2
-
-conn = psycopg2.connect(database="your_database_name", user="your_username", password="your_password", host="your_host", port="your_port")
-
-cur = conn.cursor()
-
-cur.execute('''CREATE TABLE Users (ID SERIAL PRIMARY KEY, Username TEXT, Email TEXT, Password TEXT)''')
-
-cur.execute('''CREATE TABLE Projects (ID SERIAL PRIMARY KEY, Name TEXT, Description TEXT, Start_Date TEXT, End_Date TEXT)''')
-
-cur.execute('''CREATE TABLE Tasks (ID SERIAL PRIMARY KEY, Name TEXT, Description TEXT, Due_Date TEXT, Status TEXT, Project_ID INTEGER)''')
-
-conn.commit()
-
-conn.close()
-
 import streamlit as st
 import psycopg2
 
