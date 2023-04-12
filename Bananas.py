@@ -18,6 +18,7 @@ with urllib.request.urlopen(image_url) as url:
 image = Image.open(BytesIO(image_data))
 
 # Use the image in your code as desired, for example:
+i = 0
 st.image(image, caption="Generated Image {}".format(i+1), use_column_width=True)
  
 
