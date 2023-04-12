@@ -3,12 +3,9 @@ from tensorflow import keras
 from tensorflow.keras import layers
 import numpy as np
 import streamlit as st
-
-
-
-#this function works on streamlit==0.71.0
 import urllib.request
 from PIL import Image
+from io import BytesIO
 
 # Define the URL of the image to load
 image_url = "https://raw.githubusercontent.com/alihadianai/bananas/main/banana_dataset/00.png"
@@ -22,8 +19,7 @@ image = Image.open(BytesIO(image_data))
 
 # Use the image in your code as desired, for example:
 st.image(image, caption="Generated Image {}".format(i+1), use_column_width=True)
-
-
+ 
 
 # Load the dataset
 dataset = keras.preprocessing.image_dataset_from_directory(
