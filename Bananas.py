@@ -1,5 +1,7 @@
+Please debugging and complete the code.
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 
 class ProjectManagementApp:
     def __init__(self):
@@ -7,10 +9,12 @@ class ProjectManagementApp:
             'Home': self.render_home_page,
             'Tasks': self.render_tasks_page,
             'Projects': self.render_projects_page,
+            'Project Progress': self.render_project_progress_page,
         }
         self.current_page = 'Home'
         self.tasks_df = pd.DataFrame(columns=['Task name', 'Task description', 'Due date'])
         self.projects_df = pd.DataFrame(columns=['Project name', 'Project description', 'Status'])
+        self.project_progress_df = pd.DataFrame(columns=['Project name', 'Progress'])
         
     def render_home_page(self):
         st.title('Welcome to the project management app')
@@ -39,8 +43,36 @@ class ProjectManagementApp:
                 self.projects_df.loc[len(self.projects_df)] = [project_name, project_description, project_status]
                 st.write('Project created:')
                 st.write(self.projects_df)
+                
+                # Add the project to the project progress dataframe
+                self.project_progress_df.loc[len(self.project_progress_df)] = [project_name, 0]
+                
             except:
                 st.error('Error creating project')
+    
+    def render_project_progress_page(self):
+        st.title('Project Progress')
+        if len(self.project_progress_df) > 0:
+            project_name = st.selectbox('Select a project', self.project_progress_df['Project name'])
+            progress = st.slider('Progress', 0, 100)
+            if st.button('Update progress'):
+                self.project_progress_df.loc[self.project_progress_df['Project name'] == project_name, 'Progress'] = progress
+                st.write('Progress updated:')
+                st.write(self.project_progress_df)
+        else:
+            st.write('No projects to display progress for.')
+            
+        # Plot the progress of each project
+        if not self.project_progress_df.empty:
+            plt.figure(figsize=(10,6))
+            for project_name in self.project_progress_df['Project name']:
+                project_progress = self.project_progress_df[self.project_progress_df['Project name'] == project_name]['Progress']
+                plt.plot(project_progress, label=project_name)
+            plt.title('Project Progress')
+            plt.xlabel('Time')
+            plt.ylabel('Progress (%)')
+            plt.legend()
+            st.pyplot()
     
     def run(self):
         st.sidebar.title('Navigation')
@@ -48,17 +80,42 @@ class ProjectManagementApp:
             page_selection = st.sidebar.selectbox('Select a page', list(self.pages.keys()), index=0)
             if page_selection != self.current_page:
                 self.current_page = page_selection
-        elif self.current_page == 'Tasks':
-            page_selection = st.sidebar.selectbox('Select a page', list(self.pages.keys()), index=1)
-            if page_selection != self.current_page:
-                self.current_page = page_selection
-        elif self.current_page == 'Projects':
-            page_selection = st.sidebar.selectbox('Select a page', list(self.pages.keys()), index=2)
-            if page_selection != self.current_page:
-                self.current_page = page_selection
-                
-        self.pages[self.current_page]()
+            elif self.current_page == 'Tasks':
+page_selection = st.sidebar.selectbox('Select a page', list(self.pages.keys()), index=1)
+if page_selection != self.current_page:
+self.current_page = page_selection
+elif self.current_page == 'Projects':
+page_selection = st.sidebar.selectbox('Select a page', list(self.pages.keys()), index=2)
+if page_selection != self.current_page:
+self.current_page = page_selection
+elif self.current_page == 'Team':
+page_selection = st.sidebar.selectbox('Select a page', list(self.pages.keys()), index=3)
+if page_selection != self.current_page:
+self.current_page = page_selection
+    if self.current_page == 'Projects':
+        self.render_projects_page()
+        self.render_project_chart()
+    elif self.current_page == 'Tasks':
+        self.render_tasks_page()
+    elif self.current_page == 'Team':
+        self.render_team_page()
+    else:
+        self.render_home_page()
 
-if __name__ == '__main__':
-    app = ProjectManagementApp()
-    app.run()
+def render_project_chart(self):
+    st.title('Project Progress Chart')
+    project_status_count = self.projects_df['Status'].value_counts()
+    if not project_status_count.empty:
+        chart_data = pd.DataFrame({
+            'Status': project_status_count.index,
+            'Count': project_status_count.values
+        })
+        st.bar_chart(chart_data)
+    else:
+        st.write('No projects found')
+
+def render_team_page(self):
+    st.title('Team Page')
+    st.write('This is the team page where team members can see the progress of the projects.')
+    st.write('Here, you can see the progress chart of all projects.')
+    self.render_project_chart()
