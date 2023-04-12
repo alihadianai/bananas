@@ -13,8 +13,8 @@ class ProjectManagementApp:
         self.projects_df = pd.DataFrame(columns=['Project name', 'Project description', 'Status'])
         
     def render_home_page(self):
-        st.title('Welcome to the home page')
-        st.write('This is the home page of the project management app')
+        st.title('Welcome to the project management app')
+        st.write('This app allows you to manage your tasks and projects in one place.')
         
     def render_tasks_page(self):
         st.title('Task management')
@@ -45,14 +45,19 @@ class ProjectManagementApp:
     def run(self):
         st.sidebar.title('Navigation')
         if self.current_page == 'Home':
-            st.sidebar.selectbox('Select a page', list(self.pages.keys()), index=0)
-            self.render_home_page()
+            page_selection = st.sidebar.selectbox('Select a page', list(self.pages.keys()), index=0)
+            if page_selection != self.current_page:
+                self.current_page = page_selection
         elif self.current_page == 'Tasks':
-            st.sidebar.selectbox('Select a page', list(self.pages.keys()), index=1)
-            self.render_tasks_page()
+            page_selection = st.sidebar.selectbox('Select a page', list(self.pages.keys()), index=1)
+            if page_selection != self.current_page:
+                self.current_page = page_selection
         elif self.current_page == 'Projects':
-            st.sidebar.selectbox('Select a page', list(self.pages.keys()), index=2)
-            self.render_projects_page()
+            page_selection = st.sidebar.selectbox('Select a page', list(self.pages.keys()), index=2)
+            if page_selection != self.current_page:
+                self.current_page = page_selection
+                
+        self.pages[self.current_page]()
 
 if __name__ == '__main__':
     app = ProjectManagementApp()
