@@ -11,7 +11,7 @@ import urllib.request
 from PIL import Image
 
 # Define the URL of the image to load
-image_url = "https://raw.githubusercontent.com/alihadianai/bananas/main/banana_dataset/image1.jpg"
+image_url = "https://raw.githubusercontent.com/alihadianai/bananas/main/banana_dataset/00.png"
 
 # Load the image from the URL
 with urllib.request.urlopen(image_url) as url:
