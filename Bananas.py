@@ -1,4 +1,3 @@
-Please debugging and complete the code.
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -80,42 +79,44 @@ class ProjectManagementApp:
             page_selection = st.sidebar.selectbox('Select a page', list(self.pages.keys()), index=0)
             if page_selection != self.current_page:
                 self.current_page = page_selection
+        elif self.current_page == 'Tasks':
+            page_selection = st.sidebar.selectbox('Select a page', list(self.pages.keys()), index=1)
+            if page_selection != self.current_page:
+            self.current_page = page_selection
+            elif self.current_page == 'Projects':
+            page_selection = st.sidebar.selectbox('Select a page', list(self.pages.keys()), index=2)
+            if page_selection != self.current_page:
+            self.current_page = page_selection
+            elif self.current_page == 'Team':
+            page_selection = st.sidebar.selectbox('Select a page', list(self.pages.keys()), index=3)
+            if page_selection != self.current_page:
+            self.current_page = page_selection
+            if self.current_page == 'Projects':
+            self.render_projects_page()
+            self.render_project_chart()
             elif self.current_page == 'Tasks':
-page_selection = st.sidebar.selectbox('Select a page', list(self.pages.keys()), index=1)
-if page_selection != self.current_page:
-self.current_page = page_selection
-elif self.current_page == 'Projects':
-page_selection = st.sidebar.selectbox('Select a page', list(self.pages.keys()), index=2)
-if page_selection != self.current_page:
-self.current_page = page_selection
-elif self.current_page == 'Team':
-page_selection = st.sidebar.selectbox('Select a page', list(self.pages.keys()), index=3)
-if page_selection != self.current_page:
-self.current_page = page_selection
-    if self.current_page == 'Projects':
-        self.render_projects_page()
+            self.render_tasks_page()
+            elif self.current_page == 'Team':
+            self.render_team_page()
+            else:
+            self.render_home_page()
+    def render_project_chart(self):
+        st.title('Project Progress Chart')
+        project_status_count = self.projects_df['Status'].value_counts()
+        if not project_status_count.empty:
+            chart_data = pd.DataFrame({
+                'Status': project_status_count.index,
+                'Count': project_status_count.values
+            })
+            st.bar_chart(chart_data)
+        else:
+            st.write('No projects found')
+
+    def render_team_page(self):
+        st.title('Team Page')
+        st.write('This is the team page where team members can see the progress of the projects.')
+        st.write('Here, you can see the progress chart of all projects.')
         self.render_project_chart()
-    elif self.current_page == 'Tasks':
-        self.render_tasks_page()
-    elif self.current_page == 'Team':
-        self.render_team_page()
-    else:
-        self.render_home_page()
-
-def render_project_chart(self):
-    st.title('Project Progress Chart')
-    project_status_count = self.projects_df['Status'].value_counts()
-    if not project_status_count.empty:
-        chart_data = pd.DataFrame({
-            'Status': project_status_count.index,
-            'Count': project_status_count.values
-        })
-        st.bar_chart(chart_data)
-    else:
-        st.write('No projects found')
-
-def render_team_page(self):
-    st.title('Team Page')
-    st.write('This is the team page where team members can see the progress of the projects.')
-    st.write('Here, you can see the progress chart of all projects.')
-    self.render_project_chart()
+        if name == 'main':
+app = ProjectManagementApp()
+app.run()
