@@ -117,6 +117,6 @@ class ProjectManagementApp:
         st.write('This is the team page where team members can see the progress of the projects.')
         st.write('Here, you can see the progress chart of all projects.')
         self.render_project_chart()
-        if name == 'main':
-app = ProjectManagementApp()
-app.run()
+    if name == 'main':
+    app = ProjectManagementApp()
+    app.run()
