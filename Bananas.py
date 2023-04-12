@@ -1,4 +1,10 @@
 import streamlit as st
+import sys
+import os
+
+# Add the directory containing the "db.py" file to the Python path
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 from db import Database
 
 class ProjectManagementApp:
