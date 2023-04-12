@@ -4,9 +4,22 @@ from tensorflow.keras import layers
 import numpy as np
 import streamlit as st
 
+#this function works on streamlit==0.71.0
+    #background image for the webapp
+    page_bg_img = '''
+    <style>
+    body {
+    background-image: url("https://cutewallpaper.org/21/website-background-wallpaper/Geometric-abstract-grey-background-for-bussines-templates-.jpg");
+    background-size: cover;
+    }
+    </style>
+    '''
+    st.markdown(page_bg_img, unsafe_allow_html=True)
+
+
 # Load the dataset
 dataset = keras.preprocessing.image_dataset_from_directory(
-    "banana_dataset", batch_size=32, image_size=(64, 64)
+    "bananas/banana_dataset", batch_size=32, image_size=(64, 64)
 )
 
 # Normalize and preprocess the images
