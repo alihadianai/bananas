@@ -4,17 +4,25 @@ from tensorflow.keras import layers
 import numpy as np
 import streamlit as st
 
+
+
 #this function works on streamlit==0.71.0
-    #background image for the webapp
-    page_bg_img = '''
-    <style>
-    body {
-    background-image: url("https://cutewallpaper.org/21/website-background-wallpaper/Geometric-abstract-grey-background-for-bussines-templates-.jpg");
-    background-size: cover;
-    }
-    </style>
-    '''
-    st.markdown(page_bg_img, unsafe_allow_html=True)
+import urllib.request
+from PIL import Image
+
+# Define the URL of the image to load
+image_url = "https://raw.githubusercontent.com/alihadianai/bananas/main/banana_dataset/image1.jpg"
+
+# Load the image from the URL
+with urllib.request.urlopen(image_url) as url:
+    image_data = url.read()
+
+# Convert the image data to a PIL Image object
+image = Image.open(BytesIO(image_data))
+
+# Use the image in your code as desired, for example:
+st.image(image, caption="Generated Image {}".format(i+1), use_column_width=True)
+
 
 
 # Load the dataset
