@@ -2,6 +2,8 @@ import urllib.request
 from PIL import Image
 import os
 import numpy as np
+import scikit-learn
+
 
 # Define the image size
 IMAGE_SIZE = (64, 64)
