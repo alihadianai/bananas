@@ -2,7 +2,8 @@ import urllib.request
 from PIL import Image
 import os
 import numpy as np
-import scikit-learn
+import sklearn
+
 
 
 # Define the image size
