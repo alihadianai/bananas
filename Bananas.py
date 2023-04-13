@@ -1,5 +1,7 @@
+import urllib.request
 from PIL import Image
 import os
+import numpy as np
 
 # Define the image size
 IMAGE_SIZE = (64, 64)
@@ -20,9 +22,12 @@ def load_image(filename):
 def load_dataset(path):
     images = []
     for file in os.listdir(path):
-        image = load_image(os.path.join(path, file))
-        images.append(image)
+        if file.endswith('.jpg') or file.endswith('.jpeg') or file.endswith('.png'):
+            url = f"https://raw.githubusercontent.com/alihadianai/bananas/main/{file}"
+            urllib.request.urlretrieve(url, f"images/{file}")
+            image = load_image(f"images/{file}")
+            images.append(image)
     return np.array(images)
 
-# Load the dataset from the local directory
-dataset = load_dataset('bananas/main/banana_dataset/')
+# Load the dataset from the GitHub repository
+dataset = load_dataset('images')
