@@ -21,11 +21,13 @@ def load_image(filename):
 # Load all images from the directory
 def load_dataset(path):
     images = []
+    if not os.path.exists(path):
+        os.makedirs(path)
     for file in os.listdir(path):
         if file.endswith('.jpg') or file.endswith('.jpeg') or file.endswith('.png'):
-            url = f"https://raw.githubusercontent.com/alihadianai/bananas/main/{file}"
-            urllib.request.urlretrieve(url, f"images/{file}")
-            image = load_image(f"images/{file}")
+            url = f"https://raw.githubusercontent.com/alihadianai/bananas/main/banana_dataset"
+            urllib.request.urlretrieve(url, f"{path}/{file}")
+            image = load_image(f"{path}/{file}")
             images.append(image)
     return np.array(images)
 
